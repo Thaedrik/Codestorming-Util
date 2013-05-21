@@ -12,9 +12,12 @@
 package org.codestorming.util.io;
 
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
-
 
 /**
  * Represents a {@link CharSequence} of a text {@link File file}.
@@ -25,13 +28,15 @@ public class FileString implements CharSequence {
 
 	protected static final int BUFFER_SIZE = 50;
 
-	protected static final double LOAD_FACTOR = 0.25;
+	protected static final double LOAD_FACTOR = 0.75;
 
 	protected File file;
 
+	private Charset charset;
+
 	private char[] content;
 
-	private int size = 0;
+	private volatile int size = 0;
 
 	private FutureTask<Boolean> loader;
 
@@ -39,10 +44,11 @@ public class FileString implements CharSequence {
 	 * Creates a new {@code FileString} with the given {@link File file}.
 	 * 
 	 * @param file
+	 * @param charset
 	 * @throws IllegalArgumentException if the given file is not a <em>normal file</em>.
 	 * @see File#isFile()
 	 */
-	public FileString(File file) {
+	public FileString(File file, Charset charset) {
 		assert file != null;
 		if (!file.exists()) {
 			throw new IllegalArgumentException("The given file doesn't exist.");
@@ -53,34 +59,44 @@ public class FileString implements CharSequence {
 		}// else
 
 		this.file = file;
+		this.charset = charset;
 		load();
+	}
+
+	/**
+	 * Creates a new {@code FileString} with the given {@link File file}.
+	 * 
+	 * @param file
+	 * @throws IllegalArgumentException if the given file is not a <em>normal file</em>.
+	 * @see File#isFile()
+	 */
+	public FileString(File file) {
+		this(file, Charset.forName("UTF-8"));
 	}
 
 	private synchronized void load() {
 		loader = new FutureTask<Boolean>(new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
-				BufferedReader reader = null;
+				final CharsetDecoder decoder = charset.newDecoder().onMalformedInput(CodingErrorAction.REPLACE)
+						.onUnmappableCharacter(CodingErrorAction.REPLACE);
+				FileInputStream fis = null;
+				byte[] buffer = new byte[1024];
 				try {
-					reader = new BufferedReader(new FileReader(file));
 					content = new char[getInitialCapacity()];
-					String line = reader.readLine();
-					while (line != null) {
-						ensureCapacity(size + line.length() + 1);
-						line.getChars(0, line.length(), content, size);
-						content[size + line.length()] = '\n';
-						size += line.length() + 1;
-						line = reader.readLine();
+					fis = new FileInputStream(file);
+					int len = 0;
+					while ((len = fis.read(buffer)) > 0) {
+						ensureCapacity(size + len);
+						decoder.decode(ByteBuffer.wrap(buffer, 0, len)).get(content, size, len);
+						size += len;
 					}
 					return true;
-				} catch (FileNotFoundException e) {
-					// Should never happen
-					return false;
 				} catch (IOException e) {
 					e.printStackTrace();
 					return false;
 				} finally {
-					FileHelper.close(reader);
+					FileHelper.close(fis);
 				}
 			}
 		});
@@ -121,7 +137,7 @@ public class FileString implements CharSequence {
 	}
 
 	@Override
-	public synchronized int length() {
+	public int length() {
 		if (!ready()) {
 			return 0;
 		}// else
@@ -186,10 +202,14 @@ public class FileString implements CharSequence {
 			return;
 		}// else
 
+		FileOutputStream fos = null;
 		try {
-			new FileOutputStream(file, false).write(toString().getBytes());
+			fos = new FileOutputStream(file, false);
+			fos.write(toString().getBytes());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		} finally {
+			FileHelper.close(fos);
 		}
 	}
 
