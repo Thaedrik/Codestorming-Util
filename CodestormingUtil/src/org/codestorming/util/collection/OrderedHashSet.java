@@ -19,26 +19,46 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
+import java.util.RandomAccess;
 import java.util.Set;
 
 /**
  * This class implements the {@link Set} and the {@link List} interfaces. It is backed by
- * a HashMap an uses an array to keep the insertion order.
+ * a {@code HashMap} and uses an array to keep the insertion order.
+ * <p>
+ * The addition of an object already present in the set does nothing, that is, the index
+ * at which the object was first inserted does not change.
  * <p>
  * The {@link #subList(int, int)} method and the {@link ListIterator}'s methods
- * <em>set</em> and <em>add</em> are <strong>not supported</strong>.
+ * <em>set</em> and <em>add</em> are <strong>not supported</strong> <TODO : implements
+ * these methods>.
  * 
  * @author Thaedrik <thaedrik@gmail.com>
  */
-public class OrderedHashSet<E> extends HashSet<E> implements List<E> {
+public class OrderedHashSet<E> extends HashSet<E> implements List<E>, RandomAccess {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Default initial capacity.<br>
+	 * The capacity is the number of elements this set can have without resizing itself.
+	 */
 	private static final int DEFAULT_CAPACITY = 10;
+
+	/**
+	 * Default load factor.<br>
+	 * The load factor is the ratio used to increase the capacity when the set is full.
+	 */
 	private static final float DEFAULT_LOAD_FACTOR = 0.75f;
 
+	/**
+	 * Internal sequential collection of the elements put in the set
+	 */
 	private E[] elements;
 
+	/**
+	 * The actual load factor.
+	 */
 	private float loadFactor = DEFAULT_LOAD_FACTOR;
 
 	/**
@@ -46,7 +66,6 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E> {
 	 */
 	@SuppressWarnings("unchecked")
 	public OrderedHashSet() {
-		super();
 		elements = (E[]) new Object[DEFAULT_CAPACITY];
 	}
 
@@ -88,7 +107,7 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E> {
 
 	@Override
 	public boolean add(E e) {
-		ensureCapacity(elements.length + 1);
+		ensureCapacity(size() + 1);
 		return internalAdd(size(), e);
 	}
 
@@ -138,14 +157,12 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E> {
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	private void internalListRemove(int index) {
-		final E[] newArray = (E[]) new Object[size() - 1];
-		System.arraycopy(elements, 0, newArray, 0, index);
 		if (index < elements.length - 1) {
-			System.arraycopy(elements, index + 1, newArray, index, newArray.length - index);
+			System.arraycopy(elements, index + 1, elements, index, elements.length - (index + 1));
+		} else {
+			elements[index] = null;
 		}
-		elements = newArray;
 	}
 
 	@Override
@@ -229,7 +246,7 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E> {
 		if (index < 0 || index > size()) {
 			throw new IndexOutOfBoundsException();
 		}// else
-		ensureCapacity(elements.length + c.size());
+		ensureCapacity(size() + c.size());
 		boolean modified = false;
 		final Iterator<? extends E> i = c.iterator();
 		int insertionIndex = index;
@@ -244,7 +261,9 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E> {
 
 	private boolean internalAdd(int index, E e) {
 		if (super.add(e)) {
-			System.arraycopy(elements, index, elements, index + 1, elements.length - index);
+			if (index < size() - 1) {
+				System.arraycopy(elements, index, elements, index + 1, size() - index);
+			}
 			elements[index] = e;
 			return true;
 		}// else
@@ -288,7 +307,7 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E> {
 		if (index < 0 || index > size()) {
 			throw new IndexOutOfBoundsException();
 		}// else
-		ensureCapacity(elements.length + 1);
+		ensureCapacity(size() + 1);
 		internalAdd(index, element);
 	}
 
@@ -337,79 +356,7 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E> {
 
 	@Override
 	public ListIterator<E> listIterator(final int index) {
-		return new ListIterator<E>() {
-			private final int size = size();
-			private int currentIndex = index;
-			private int lastReturned = -1;
-			// Flag indicating the last returned element has been removed
-			private boolean removed;
-
-			@Override
-			public boolean hasNext() {
-				return currentIndex < size;
-			}
-
-			@Override
-			public E next() {
-				if (!hasNext()) {
-					throw new NoSuchElementException();
-				}// else
-				removed = false;// Cleaning removed flag
-				lastReturned = currentIndex;
-				return elements[currentIndex++];
-			}
-
-			@Override
-			public void remove() {
-				if (lastReturned < 0) {
-					throw new IllegalStateException("You must call next() or previous() before.");
-				} else if (removed) {
-					throw new IllegalStateException("The current element has already been removed.");
-				}// else
-				if (internalRemove(lastReturned, elements[lastReturned])) {
-					removed = true;
-					if (lastReturned < currentIndex) {
-						currentIndex--;
-					}
-				}
-			}
-
-			@Override
-			public boolean hasPrevious() {
-				return currentIndex > 0;
-			}
-
-			@Override
-			public E previous() {
-				if (!hasPrevious()) {
-					throw new NoSuchElementException();
-				}// else
-				removed = false;// Cleaning removed flag
-				lastReturned = --currentIndex;
-				return elements[currentIndex];
-			}
-
-			@Override
-			public int nextIndex() {
-				return currentIndex;
-			}
-
-			@Override
-			public int previousIndex() {
-				return currentIndex - 1;
-			}
-
-			@Override
-			public void set(E e) {
-				throw new UnsupportedOperationException();
-			}
-
-			@Override
-			public void add(E e) {
-				throw new UnsupportedOperationException();
-			}
-
-		};
+		return new OrderedSetIterator<E>(this, index);
 	}
 
 	@Override
@@ -439,6 +386,87 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E> {
 			final E[] newArray = (E[]) new Object[newSize];
 			System.arraycopy(elements, 0, newArray, 0, size());
 			elements = newArray;
+		}
+	}
+
+	static class OrderedSetIterator<T> implements ListIterator<T> {
+		private final OrderedHashSet<T> orderedHashSet;
+		private int currentIndex;
+		private int lastReturned = -1;
+		// Flag indicating the last returned element has been removed
+		private boolean removed;
+
+		/**
+		 * Creates a new {@code OrderedSetIterator}.
+		 */
+		OrderedSetIterator(OrderedHashSet<T> orderedHashSet, int index) {
+			this.orderedHashSet = orderedHashSet;
+			currentIndex = index;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return currentIndex < orderedHashSet.size();
+		}
+
+		@Override
+		public T next() {
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			}// else
+			removed = false;// Cleaning removed flag
+			lastReturned = currentIndex;
+			return orderedHashSet.elements[currentIndex++];
+		}
+
+		@Override
+		public void remove() {
+			if (lastReturned < 0) {
+				throw new IllegalStateException("You must call next() or previous() before.");
+			} else if (removed) {
+				throw new IllegalStateException("The current element has already been removed.");
+			}// else
+			if (orderedHashSet.internalRemove(lastReturned, orderedHashSet.elements[lastReturned])) {
+				removed = true;
+				if (lastReturned < currentIndex) {
+					currentIndex--;
+				}
+			}
+		}
+
+		@Override
+		public boolean hasPrevious() {
+			return currentIndex > 0;
+		}
+
+		@Override
+		public T previous() {
+			if (!hasPrevious()) {
+				throw new NoSuchElementException();
+			}// else
+			removed = false;// Cleaning removed flag
+			lastReturned = --currentIndex;
+			return orderedHashSet.elements[currentIndex];
+		}
+
+		@Override
+		public int nextIndex() {
+			return currentIndex;
+		}
+
+		@Override
+		public int previousIndex() {
+			return currentIndex - 1;
+		}
+
+		@Override
+		public void set(T e) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void add(T e) {
+			throw new UnsupportedOperationException();
 		}
 	}
 }
