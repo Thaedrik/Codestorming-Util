@@ -13,6 +13,7 @@ package org.codestorming.util.io;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
@@ -87,9 +88,11 @@ public class FileString implements CharSequence {
 					fis = new FileInputStream(file);
 					int len = 0;
 					while ((len = fis.read(buffer)) > 0) {
-						ensureCapacity(size + len);
-						decoder.decode(ByteBuffer.wrap(buffer, 0, len)).get(content, size, len);
-						size += len;
+						final CharBuffer charBuffer = decoder.decode(ByteBuffer.wrap(buffer, 0, len));
+						final int length = charBuffer.length();
+						ensureCapacity(size + length);
+						charBuffer.get(content, size, length);
+						size += length;
 					}
 					return true;
 				} catch (IOException e) {
