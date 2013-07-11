@@ -29,7 +29,7 @@ public class Interval implements Serializable {
 	private long inferiorEndPoint;
 	private long superiorEndPoint;
 
-	private String cachedToString;
+	private transient String cachedToString;
 
 	/**
 	 * Creates a new {@code Interval}.
