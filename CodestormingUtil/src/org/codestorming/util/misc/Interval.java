@@ -18,6 +18,10 @@ import java.io.Serializable;
  * <p>
  * The endpoints are {@link Long} integers and are limited to {@link Long#MIN_VALUE} and
  * {@link Long#MAX_VALUE}.
+ * <p>
+ * In case of the <em>empty interval</em>, the endpoints are {@code 0} but are
+ * meaningless, when creating intervals through union or intersection, one should check if
+ * the interval is empty.
  * 
  * @author Thaedrik <thaedrik@gmail.com>
  * @see FragmentedInterval
@@ -26,10 +30,19 @@ public class Interval implements Serializable {
 
 	private static final long serialVersionUID = 2324819391610446221L;
 
+	private boolean empty;
+
 	private long inferiorEndPoint;
 	private long superiorEndPoint;
 
 	private transient String cachedToString;
+
+	/**
+	 * Creates the <em>empty</em> {@code Interval}.
+	 */
+	public Interval() {
+		empty = true;
+	}
 
 	/**
 	 * Creates a new {@code Interval}.
@@ -47,7 +60,19 @@ public class Interval implements Serializable {
 	}
 
 	/**
+	 * Indicates if this {@code Interval} is the <em>empty interval</em>.
+	 * 
+	 * @return {@code true} if this {@code Interval} is the <em>empty interval</em>;<br>
+	 *         {@code false} otherwise.
+	 */
+	public boolean isEmpty() {
+		return empty;
+	}
+
+	/**
 	 * Returns the value of {@code inferiorEndPoint}.
+	 * <p>
+	 * <em>Meaningless if this {@code Interval} is {@link Interval#isEmpty() empty}.</em>
 	 * 
 	 * @return the value of {@code inferiorEndPoint}.
 	 */
@@ -57,6 +82,8 @@ public class Interval implements Serializable {
 
 	/**
 	 * Returns the value of {@code superiorEndPoint}.
+	 * <p>
+	 * <em>Meaningless if this {@code Interval} is {@link Interval#isEmpty() empty}.</em>
 	 * 
 	 * @return the value of {@code superiorEndPoint}.
 	 */
@@ -74,7 +101,7 @@ public class Interval implements Serializable {
 	 *         {@code false} otherwise.
 	 */
 	public boolean contains(long point) {
-		return point >= inferiorEndPoint && point <= superiorEndPoint;
+		return !empty && point >= inferiorEndPoint && point <= superiorEndPoint;
 	}
 
 	/**
@@ -86,7 +113,11 @@ public class Interval implements Serializable {
 	 *         {@code false} otherwise.
 	 */
 	public boolean contains(Interval interval) {
-		return contains(interval.getInferiorEndPoint()) && contains(interval.getSuperiorEndPoint());
+		if (empty) {
+			return interval.isEmpty();
+		}// else
+		return interval.isEmpty() || contains(interval.getInferiorEndPoint())
+				&& contains(interval.getSuperiorEndPoint());
 	}
 
 	/**
@@ -99,7 +130,7 @@ public class Interval implements Serializable {
 	 *         {@code false} otherwise.
 	 */
 	public boolean isPreviousOf(Interval interval) {
-		return superiorEndPoint + 1L == interval.inferiorEndPoint;
+		return !empty && superiorEndPoint + 1L == interval.inferiorEndPoint;
 	}
 
 	/**
@@ -112,7 +143,7 @@ public class Interval implements Serializable {
 	 *         {@code false} otherwise.
 	 */
 	public boolean isNextOf(Interval interval) {
-		return interval.isPreviousOf(this);
+		return !empty && interval.isPreviousOf(this);
 	}
 
 	/**
@@ -123,20 +154,21 @@ public class Interval implements Serializable {
 	 *         {@code false} otherwise.
 	 */
 	public boolean intersect(Interval interval) {
-		return contains(interval.getInferiorEndPoint()) || contains(interval.getSuperiorEndPoint())
-				|| interval.contains(getInferiorEndPoint()) || interval.contains(getSuperiorEndPoint());
+		return !empty
+				&& (contains(interval.getInferiorEndPoint()) || contains(interval.getSuperiorEndPoint())
+						|| interval.contains(getInferiorEndPoint()) || interval.contains(getSuperiorEndPoint()));
 	}
 
 	/**
 	 * Creates the interval corresponding to the intersection of this {@code Interval} and
-	 * the given one or {@code null} if the two intervals do not intersect.
+	 * the given one or the <em>empty interval</em> if the two intervals do not intersect.
 	 * 
 	 * @param interval The interval to intersect with this one.
 	 * @return the interval corresponding to the intersection of this {@code Interval} and
-	 *         the given one or {@code null}.
+	 *         the given one or the <em>empty interval</em>.
 	 */
 	public Interval intersection(Interval interval) {
-		Interval intersection = null;
+		Interval intersection = new Interval();
 		if (intersect(interval)) {
 			final long infEndP = Math.max(inferiorEndPoint, interval.getInferiorEndPoint());
 			final long supEndP = Math.min(superiorEndPoint, interval.getSuperiorEndPoint());
@@ -156,6 +188,9 @@ public class Interval implements Serializable {
 	 *         contiguous.
 	 */
 	public Interval union(Interval interval) {
+		if (empty) {
+			return interval;
+		}// else
 		final long maxInfEndP = Math.max(inferiorEndPoint, interval.getInferiorEndPoint());
 		final long minSupEndP = Math.min(superiorEndPoint, interval.getSuperiorEndPoint());
 		if (maxInfEndP > minSupEndP + 1) {
@@ -175,6 +210,9 @@ public class Interval implements Serializable {
 		if (!(obj instanceof Interval))
 			return false;
 		Interval other = (Interval) obj;
+		if (empty) {
+			return other.isEmpty();
+		}
 		return inferiorEndPoint == other.inferiorEndPoint && superiorEndPoint == other.superiorEndPoint;
 	}
 
@@ -191,13 +229,17 @@ public class Interval implements Serializable {
 	@Override
 	public String toString() {
 		if (cachedToString == null) {
-			StringBuilder builder = new StringBuilder();
-			builder.append('[');
-			builder.append(inferiorEndPoint);
-			builder.append(',');
-			builder.append(superiorEndPoint);
-			builder.append(']');
-			cachedToString = builder.toString();
+			if (!empty) {
+				StringBuilder builder = new StringBuilder();
+				builder.append('[');
+				builder.append(inferiorEndPoint);
+				builder.append(',');
+				builder.append(superiorEndPoint);
+				builder.append(']');
+				cachedToString = builder.toString();
+			} else {
+				cachedToString = "{\u00D8}";
+			}
 		}
 		return cachedToString;
 	}
