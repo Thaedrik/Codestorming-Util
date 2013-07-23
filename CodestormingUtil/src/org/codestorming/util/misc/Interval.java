@@ -184,7 +184,7 @@ public class Interval implements Serializable {
 	 * @param interval The interval for which to create the union with this one.
 	 * @return the interval corresponding to the union of this {@code Interval} and
 	 *         the given one.
-	 * @throws NotContiguousIntervalException if the union between the two interval is not
+	 * @throws NotContiguousIntervalException if the union between the two intervals is not
 	 *         contiguous.
 	 */
 	public Interval union(Interval interval) {
@@ -199,6 +199,54 @@ public class Interval implements Serializable {
 		final long infEndP = Math.min(inferiorEndPoint, interval.getInferiorEndPoint());
 		final long supEndP = Math.max(superiorEndPoint, interval.getSuperiorEndPoint());
 		return new Interval(infEndP, supEndP);
+	}
+
+	/**
+	 * Creates the interval corresponding to the exclusive union between this
+	 * {@code Interval} and thr given one.
+	 * 
+	 * @param interval The interval for which to create the exclusive union with this one.
+	 * @return the interval corresponding to the exclusive union between this
+	 *         {@code Interval} and thr given one.
+	 * @throws NotContiguousIntervalException if the exclusive union between the two intervals is not
+	 *         contiguous.
+	 */
+	public Interval exclusiveUnion(Interval interval) {
+		Interval newInterval;
+		if (!intersect(interval)) {
+			if (interval.isNextOf(this)) {
+				newInterval = new Interval(getInferiorEndPoint(), interval.getSuperiorEndPoint());
+			} else if (interval.isPreviousOf(this)) {
+				newInterval = new Interval(interval.getInferiorEndPoint(), getSuperiorEndPoint());
+			} else {
+				throw new NotContiguousIntervalException();
+			}
+		} else {
+			Interval i1;
+			Interval i2;
+			if (contains(interval)) {
+				i1 = this;
+				i2 = interval;
+			} else if (interval.contains(this)) {
+				i1 = interval;
+				i2 = this;
+			} else {
+				throw new NotContiguousIntervalException();
+			}
+			// i1 contains i2
+			if (i2.contains(i1)) {
+				newInterval = new Interval();
+			} else if (i2.isEmpty()) {
+				newInterval = this;
+			} else if (i2.getSuperiorEndPoint() == i1.getSuperiorEndPoint()) {
+				newInterval = new Interval(i1.getInferiorEndPoint(), i2.getInferiorEndPoint() - 1);
+			} else if (i2.getInferiorEndPoint() == i1.getInferiorEndPoint()) {
+				newInterval = new Interval(i2.getSuperiorEndPoint() + 1, i1.getSuperiorEndPoint());
+			} else {
+				throw new NotContiguousIntervalException();
+			}
+		}
+		return newInterval;
 	}
 
 	@Override
