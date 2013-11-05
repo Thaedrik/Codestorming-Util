@@ -154,8 +154,9 @@ public class Interval implements Serializable {
 	 *         {@code false} otherwise.
 	 */
 	public boolean intersect(Interval interval) {
-		return !empty
-				&& (contains(interval.getInferiorEndPoint()) || contains(interval.getSuperiorEndPoint())
+		return empty
+				|| interval.empty
+				|| (contains(interval.getInferiorEndPoint()) || contains(interval.getSuperiorEndPoint())
 						|| interval.contains(getInferiorEndPoint()) || interval.contains(getSuperiorEndPoint()));
 	}
 
@@ -184,7 +185,8 @@ public class Interval implements Serializable {
 	 * @param interval The interval for which to create the union with this one.
 	 * @return the interval corresponding to the union of this {@code Interval} and
 	 *         the given one.
-	 * @throws NotContiguousIntervalException if the union between the two intervals is not
+	 * @throws NotContiguousIntervalException if the union between the two intervals is
+	 *         not
 	 *         contiguous.
 	 */
 	public Interval union(Interval interval) {
@@ -208,7 +210,8 @@ public class Interval implements Serializable {
 	 * @param interval The interval for which to create the exclusive union with this one.
 	 * @return the interval corresponding to the exclusive union between this
 	 *         {@code Interval} and thr given one.
-	 * @throws NotContiguousIntervalException if the exclusive union between the two intervals is not
+	 * @throws NotContiguousIntervalException if the exclusive union between the two
+	 *         intervals is not
 	 *         contiguous.
 	 */
 	public Interval exclusiveUnion(Interval interval) {
