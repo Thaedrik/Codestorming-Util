@@ -30,18 +30,28 @@ public class Interval implements Serializable {
 
 	private static final long serialVersionUID = 2324819391610446221L;
 
+	/**
+	 * Instance of the empty {@link Interval}.
+	 * <p>
+	 * More than one instance of the empty interval may exist, but prefer using this
+	 * instance instead.
+	 */
+	public static final Interval EMPTY = new Interval();
+
 	private boolean empty;
 
-	private long inferiorEndPoint;
-	private long superiorEndPoint;
+	private final long inferiorEndPoint;
+	private final long superiorEndPoint;
 
 	private transient String cachedToString;
 
 	/**
 	 * Creates the <em>empty</em> {@code Interval}.
 	 */
-	public Interval() {
+	Interval() {
 		empty = true;
+		inferiorEndPoint = 0;
+		superiorEndPoint = 0;
 	}
 
 	/**
