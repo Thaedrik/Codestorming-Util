@@ -13,6 +13,8 @@ package org.codestorming.util.io;
 
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.MessageFormat;
 
 /**
  * Helper providing convenient methods for dealing with {@link File files}.
@@ -33,6 +35,24 @@ public class FileHelper {
 			}
 		} catch (Exception e) {
 			// Ignore
+		}
+	}
+
+	/**
+	 * Checks if the given file exists and throws a {@link FileNotFoundException} is it
+	 * doesn't.
+	 * 
+	 * @param file The file to check.
+	 * @throws FileNotFoundException if the given {@code file} doesn't exist or if it is
+	 *         {@code null}.
+	 */
+	public static void checkFileExists(File file) throws FileNotFoundException {
+		if (file == null) {
+			throw new FileNotFoundException();
+		}// else
+		if (!file.exists()) {
+			String message = "The file {0} does not exist.";
+			throw new FileNotFoundException(MessageFormat.format(message, file.getName()));
 		}
 	}
 }
