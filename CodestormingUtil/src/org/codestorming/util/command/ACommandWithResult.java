@@ -23,6 +23,8 @@ public abstract class ACommandWithResult<T> implements CommandWithResult<T> {
 
 	private Runnable callback;
 
+	private Callback<T> callback2;
+
 	@Override
 	public T getResult() {
 		return result;
@@ -33,6 +35,8 @@ public abstract class ACommandWithResult<T> implements CommandWithResult<T> {
 		execute();
 		if (callback != null) {
 			callback.run();
+		} else if (callback2 != null) {
+			callback2.call(getResult());
 		}
 	}
 
@@ -42,8 +46,15 @@ public abstract class ACommandWithResult<T> implements CommandWithResult<T> {
 	protected abstract void execute();
 
 	@Override
-	public void setCallback(Runnable callback) {
+	public final void setCallback(Runnable callback) {
 		this.callback = callback;
+		this.callback2 = null;
+	}
+
+	@Override
+	public final void setCallback(Callback<T> callback) {
+		this.callback2 = callback;
+		this.callback = null;
 	}
 
 	/**
@@ -51,7 +62,7 @@ public abstract class ACommandWithResult<T> implements CommandWithResult<T> {
 	 * 
 	 * @param result The result to set.
 	 */
-	protected void setResult(T result) {
+	protected final void setResult(T result) {
 		this.result = result;
 	}
 }
