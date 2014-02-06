@@ -11,6 +11,7 @@
  ****************************************************************************/
 package org.codestorming.util.collection;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -21,42 +22,39 @@ import java.util.ListIterator;
  * {@code org.codestorming.util.collection} package.
  * 
  * @author Thaedrik <thaedrik@gmail.com>
- * @see OrderedHashSet
+ * @see OrderedSet
  */
 public class Collections3 {
 
-	// Suppressing the default constructor, ensuring non-instantiability.
-	private Collections3() {}
-
 	/**
-	 * Returns a <em>thread-safe</em> {@link OrderedHashSet} backed with the given one.
+	 * Returns a <em>thread-safe</em> {@link OrderedSet} backed with the given one.
 	 * 
-	 * @param orderedHashSet {@link OrderedHashSet} to synchronize.
-	 * @return a <em>thread-safe</em> {@link OrderedHashSet} backed with the given one.
+	 * @param orderedSet {@link OrderedSet} to synchronize.
+	 * @return a <em>thread-safe</em> {@link OrderedSet} backed with the given one.
 	 */
-	public static <T> OrderedHashSet<T> synchronizedOrderedHashSet(OrderedHashSet<T> orderedHashSet) {
-		return new SynchronizedOrderedHashSet<T>(orderedHashSet);
+	public static <T> OrderedSet<T> synchronizedOrderedSet(OrderedSet<T> orderedSet) {
+		return new SynchronizedOrderedSet<T>(orderedSet);
 	}
 
 	/**
-	 * Returns an <em>unmodifiable</em> view of the given {@link OrderedHashSet}.
+	 * Returns an <em>unmodifiable</em> view of the given {@link OrderedSet}.
 	 * 
-	 * @param orderedHashSet the {@link OrderedHashSet} for which an unmodifiable view is
+	 * @param orderedSet the {@link OrderedSet} for which an unmodifiable view is
 	 *        to be returned.
-	 * @return an <em>unmodifiable</em> view of the given {@link OrderedHashSet}.
+	 * @return an <em>unmodifiable</em> view of the given {@link OrderedSet}.
 	 */
-	public static <T> OrderedHashSet<T> unmodifiableOrderedSet(OrderedHashSet<T> orderedHashSet) {
-		return new UnmodifiableOrderedHashSet<T>(orderedHashSet);
+	public static <T> OrderedSet<T> unmodifiableOrderedSet(OrderedSet<T> orderedSet) {
+		return new UnmodifiableOrderedSet<T>(orderedSet);
 	}
 
-	private static class SynchronizedOrderedHashSet<E> extends OrderedHashSet<E> {
+	private static class SynchronizedOrderedSet<E> implements OrderedSet<E>, Serializable {
 
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = 1845123657602486228L;
 
-		private OrderedHashSet<E> delegate;
+		private OrderedSet<E> delegate;
 
-		public SynchronizedOrderedHashSet(OrderedHashSet<E> orderedHashSet) {
-			delegate = orderedHashSet;
+		public SynchronizedOrderedSet(OrderedSet<E> orderedSet) {
+			delegate = orderedSet;
 		}
 
 		public synchronized boolean equals(Object o) {
@@ -87,7 +85,7 @@ public class Collections3 {
 			delegate.clear();
 		}
 
-		public synchronized Iterator<E> iterator() {
+		public Iterator<E> iterator() {
 			return delegate.iterator();
 		}
 
@@ -143,15 +141,11 @@ public class Collections3 {
 			return delegate.lastIndexOf(o);
 		}
 
-		public synchronized Object clone() {
-			return delegate.clone();
-		}
-
-		public synchronized ListIterator<E> listIterator() {
+		public ListIterator<E> listIterator() {
 			return delegate.listIterator();
 		}
 
-		public synchronized ListIterator<E> listIterator(int index) {
+		public ListIterator<E> listIterator(int index) {
 			return delegate.listIterator(index);
 		}
 
@@ -168,17 +162,19 @@ public class Collections3 {
 		}
 	}
 
-	private static class UnmodifiableOrderedHashSet<E> extends OrderedHashSet<E> {
+	private static class UnmodifiableOrderedSet<E> implements OrderedSet<E>, Serializable {
 
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = -3167309036519320200L;
 
-		private OrderedHashSet<E> delegate;
+		private OrderedSet<E> delegate;
 
 		/**
-		 * Creates a new {@code Collections3.UnmodifiableOrderedHashSet}.
+		 * Creates a new {@code UnmodifiableOrderedSet}.
+		 * 
+		 * @param orderedSet
 		 */
-		public UnmodifiableOrderedHashSet(OrderedHashSet<E> orderedHashSet) {
-			delegate = orderedHashSet;
+		public UnmodifiableOrderedSet(OrderedSet<E> orderedSet) {
+			delegate = orderedSet;
 		}
 
 		public boolean equals(Object o) {
@@ -265,16 +261,43 @@ public class Collections3 {
 			return delegate.lastIndexOf(o);
 		}
 
-		public Object clone() {
-			return delegate.clone();
-		}
-
 		public ListIterator<E> listIterator() {
 			return listIterator(0);
 		}
 
-		public ListIterator<E> listIterator(int index) {
-			return new OrderedSetIterator<E>(this, index) {
+		public ListIterator<E> listIterator(final int index) {
+			return new ListIterator<E>() {
+				private ListIterator<E> internal = delegate.listIterator(index);
+
+				@Override
+				public boolean hasNext() {
+					return internal.hasNext();
+				}
+
+				@Override
+				public E next() {
+					return internal.next();
+				}
+
+				@Override
+				public boolean hasPrevious() {
+					return internal.hasPrevious();
+				}
+
+				@Override
+				public E previous() {
+					return internal.previous();
+				}
+
+				@Override
+				public int nextIndex() {
+					return internal.nextIndex();
+				}
+
+				@Override
+				public int previousIndex() {
+					return internal.previousIndex();
+				}
 
 				@Override
 				public void remove() {
@@ -305,4 +328,7 @@ public class Collections3 {
 			return delegate.toString();
 		}
 	}
+
+	// Suppressing the default constructor, ensuring non-instantiability.
+	private Collections3() {}
 }

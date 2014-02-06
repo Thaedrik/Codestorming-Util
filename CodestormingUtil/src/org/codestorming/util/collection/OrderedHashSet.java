@@ -11,6 +11,10 @@
  ****************************************************************************/
 package org.codestorming.util.collection;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.AbstractCollection;
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,11 +24,10 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.RandomAccess;
-import java.util.Set;
 
 /**
- * This class implements the {@link Set} and the {@link List} interfaces. It is backed by
- * a {@code HashMap} and uses an array to keep the insertion order.
+ * This class implements the {@link OrderedSet} interface. It is backed by
+ * a {@code HashSet} and uses an array to keep the insertion order.
  * <p>
  * The addition of an object already present in the set does nothing, that is, the index
  * at which the object was first inserted does not change.
@@ -35,9 +38,9 @@ import java.util.Set;
  * 
  * @author Thaedrik <thaedrik@gmail.com>
  */
-public class OrderedHashSet<E> extends HashSet<E> implements List<E>, RandomAccess {
+public class OrderedHashSet<E> implements OrderedSet<E>, RandomAccess, Cloneable, Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 935390544812443951L;
 
 	/**
 	 * Default initial capacity.<br>
@@ -52,9 +55,14 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E>, RandomAcce
 	private static final float DEFAULT_LOAD_FACTOR = 0.75f;
 
 	/**
+	 * Internal {@code HashSet}.
+	 */
+	private transient HashSet<E> internalSet;
+
+	/**
 	 * Internal sequential collection of the elements put in the set
 	 */
-	private E[] elements;
+	private transient E[] elements;
 
 	/**
 	 * The actual load factor.
@@ -66,6 +74,7 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E>, RandomAcce
 	 */
 	@SuppressWarnings("unchecked")
 	public OrderedHashSet() {
+		internalSet = new HashSet<E>(DEFAULT_CAPACITY);
 		elements = (E[]) new Object[DEFAULT_CAPACITY];
 	}
 
@@ -76,8 +85,9 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E>, RandomAcce
 	 */
 	@SuppressWarnings("unchecked")
 	public OrderedHashSet(Collection<? extends E> c) {
-		super(Math.max((int) (c.size() / .75f) + 1, 16));
-		elements = (E[]) new Object[Math.max((int) (c.size() / .75f) + 1, 16)];
+		int initialCapacity = Math.max((int) (c.size() / loadFactor) + 1, DEFAULT_CAPACITY);
+		internalSet = new HashSet<E>(initialCapacity);
+		elements = (E[]) new Object[initialCapacity];
 		addAll(c);
 	}
 
@@ -89,7 +99,7 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E>, RandomAcce
 	 */
 	@SuppressWarnings("unchecked")
 	public OrderedHashSet(int initialCapacity, float loadFactor) {
-		super(initialCapacity, loadFactor);
+		internalSet = new HashSet<E>(initialCapacity, loadFactor);
 		this.loadFactor = loadFactor;
 		elements = (E[]) new Object[initialCapacity];
 	}
@@ -101,7 +111,7 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E>, RandomAcce
 	 */
 	@SuppressWarnings("unchecked")
 	public OrderedHashSet(int initialCapacity) {
-		super(initialCapacity);
+		internalSet = new HashSet<E>(initialCapacity);
 		elements = (E[]) new Object[initialCapacity];
 	}
 
@@ -150,7 +160,7 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E>, RandomAcce
 	}
 
 	private boolean internalRemove(int index, Object o) {
-		if (index >= 0 && super.remove(o)) {
+		if (index >= 0 && internalSet.remove(o)) {
 			internalListRemove(index);
 			return true;
 		}// else
@@ -166,9 +176,42 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E>, RandomAcce
 	}
 
 	@Override
+	public int size() {
+		return internalSet.size();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return internalSet.isEmpty();
+	}
+
+	@Override
+	public boolean contains(Object o) {
+		return internalSet.contains(o);
+	}
+
+	@Override
+	public boolean containsAll(Collection<?> c) {
+		return internalSet.containsAll(c);
+	}
+
+	@Override
+	public boolean retainAll(Collection<?> c) {
+		boolean modified = false;
+		Iterator<E> e = iterator();
+		while (e.hasNext()) {
+			if (!c.contains(e.next())) {
+				e.remove();
+				modified = true;
+			}
+		}
+		return modified;
+	}
+
+	@Override
 	@SuppressWarnings("unchecked")
 	public void clear() {
-		super.clear();
+		internalSet.clear();
 		elements = (E[]) new Object[DEFAULT_CAPACITY];
 	}
 
@@ -237,8 +280,59 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E>, RandomAcce
 		return (i == r.length) ? r : Arrays.copyOf(r, i);
 	}
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public Object clone() {
+		try {
+			OrderedHashSet<E> clone = (OrderedHashSet<E>) super.clone();
+			clone.elements = Arrays.copyOf(elements, size());
+			clone.internalSet = (HashSet<E>) internalSet.clone();
+			return clone;
+		} catch (CloneNotSupportedException ignore) {
+			// Should not happen, we are cloneable
+			throw new InternalError();
+		}
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}// else
+		if (!(obj instanceof OrderedSet)) {
+			return false;
+		}// else
+		OrderedSet<?> other = (OrderedSet<?>) obj;
+		if (size() != other.size()) {
+			return false;
+		}// else
+		ListIterator<E> iter = listIterator();
+		ListIterator<?> iter2 = other.listIterator();
+		while (iter.hasNext()) {
+			E o = iter.next();
+			Object o2 = iter2.next();
+			if (o == null || o2 == null) {
+				if (o != o2) {
+					return false;
+				}
+			} else if (!o.equals(o2)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int hashcode = 0;
+		for (E elt : this) {
+			hashcode = 31 * hashcode + elt.hashCode();
+		}
+		return hashcode;
+	}
+
 	/*
-	 * List methods
+	 * LIST METHODS
 	 */
 
 	@Override
@@ -260,7 +354,7 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E>, RandomAcce
 	}
 
 	private boolean internalAdd(int index, E e) {
-		if (super.add(e)) {
+		if (internalSet.add(e)) {
 			if (index < size() - 1) {
 				System.arraycopy(elements, index, elements, index + 1, size() - index);
 			}
@@ -294,10 +388,10 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E>, RandomAcce
 		if (elementIndex >= 0) {
 			internalListRemove(elementIndex);
 		} else {
-			super.add(element);
+			internalSet.add(element);
 		}
 		final E previousElement = elements[index];
-		super.remove(previousElement);
+		internalSet.remove(previousElement);
 		elements[index] = element;
 		return previousElement;
 	}
@@ -317,7 +411,7 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E>, RandomAcce
 			throw new IndexOutOfBoundsException();
 		}// else
 		final E element = elements[index];
-		if (super.remove(element)) {
+		if (internalSet.remove(element)) {
 			internalListRemove(index);
 		}
 		return element;
@@ -386,6 +480,28 @@ public class OrderedHashSet<E> extends HashSet<E> implements List<E>, RandomAcce
 			final E[] newArray = (E[]) new Object[newSize];
 			System.arraycopy(elements, 0, newArray, 0, size());
 			elements = newArray;
+		}
+	}
+
+	private void writeObject(ObjectOutputStream s) throws IOException {
+		final int size = size();
+		s.defaultWriteObject();
+		s.writeInt(elements.length);
+		s.writeInt(size);
+		for (int i = 0; i < size; i++) {
+			s.writeObject(get(i));
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		int length = s.readInt();
+		int size = s.readInt();
+		elements = (E[]) new Object[length];
+		internalSet = new HashSet<E>(size, loadFactor);
+		for (int i = 0; i < size; i++) {
+			add((E) s.readObject());
 		}
 	}
 
