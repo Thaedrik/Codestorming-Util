@@ -18,15 +18,12 @@ package org.codestorming.util;
  */
 public class Strings {
 
-	// Suppressing default constructor, ensuring non-instantiability
-	private Strings() {};
-
 	/**
-	 * Remove all <strong>trim</strong> strings at the beginning and at the end of the
+	 * Removes all <strong>trim</strong> strings at the beginning and at the end of the
 	 * given String <em>str</em>.
 	 * <p>
 	 * If {@code trim} is empty or if there is no {@code trim} string in {@code str},
-	 * nothing happen.
+	 * nothing happens.
 	 * 
 	 * @param str The string to trim.
 	 * @param trim The string to remove from {@code str}.
@@ -79,4 +76,28 @@ public class Strings {
 		}// else
 		return str.substring(0, length).endsWith(suffix);
 	}
+
+	/**
+	 * Tests if the given strings {@code a} and {@code b} are equal.
+	 * <p>
+	 * If {@code nullEqualsEmpty} is {@code true} then an empty string equals {@code null}.
+	 * 
+	 * @param a The first string to compare to {@code b}.
+	 * @param b The second string to compare to {@code a}.
+	 * @param nullEqualsEmpty Indicates if {@code null} is like an empty string.
+	 * @return {@code true} if {@code a} equals {@code b};<br>
+	 *         {@code false} otherwise.
+	 */
+	public static boolean equals(String a, String b, boolean nullEqualsEmpty) {
+		if (a == null || b == null) {
+			if (nullEqualsEmpty) {
+				return a == b || (a != null ? a.length() == 0 : b.length() == 0);
+			}// else
+			return a == b;
+		}// else
+		return a.equals(b);
+	}
+
+	// Suppressing default constructor, ensuring non-instantiability
+	private Strings() {}
 }
