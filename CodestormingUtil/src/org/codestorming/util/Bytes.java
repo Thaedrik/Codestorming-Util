@@ -18,9 +18,6 @@ package org.codestorming.util;
  */
 public class Bytes {
 
-	// Suppressing default constructor, ensuring non-instantiability
-	private Bytes() {}
-
 	/**
 	 * Create an array of four bytes corresponding to the given integer in big-endian.
 	 * 
@@ -39,20 +36,20 @@ public class Bytes {
 	/**
 	 * Returns the integer corresponding to the given byte array.
 	 * <p>
-	 * The given array must be an array of four bytes and in big-endian.
+	 * The given array must be an array of at most four bytes.
 	 * 
 	 * @param byteArray The byte array for which to have the corresponding integer.
 	 * @return the integer corresponding to the given byte array.
 	 */
 	public static int byteArrayToInt(byte[] byteArray) {
-		if (byteArray.length != 4) {
+		final int length = byteArray.length;
+		if (length < 1 || length > 4) {
 			throw new IllegalArgumentException("The array's length is incorrect : " + byteArray.length);
 		}// else
 		int integer = 0;
-		integer |= (0xFF & byteArray[0]) << 24;
-		integer |= (0xFF & byteArray[1]) << 16;
-		integer |= (0xFF & byteArray[2]) << 8;
-		integer |= (0xFF & byteArray[3]);
+		for (int i = length - 1; i >= 0; i--) {
+			integer |= (0xFF & byteArray[i]) << 8 * (length - 1 - i);
+		}
 		return integer;
 	}
 
@@ -100,4 +97,34 @@ public class Bytes {
 		longInt |= (long) (0xFF & byteArray[7]);
 		return longInt;
 	}
+
+	/**
+	 * Returns the integer value corresponding to the given unsigned byte.
+	 * 
+	 * @param b The unsigned byte.
+	 * @return the integer value corresponding to the given unsigned byte.
+	 */
+	public static int unsignedByteToInt(byte b) {
+		return 0x000000FF & b;
+	}
+
+	/**
+	 * Returns the hexadecimal string corresponding to the given byte.
+	 * <p>
+	 * The letters are upper case and the returned string is always two characters long.
+	 * 
+	 * @param b The byte.
+	 * @return the hexadecimal string corresponding to the given byte.
+	 */
+	public static String byteToString(byte b) {
+		String hexString = Integer.toHexString(unsignedByteToInt(b));
+		if (hexString.length() < 2) {
+			hexString = '0' + hexString;
+		}
+		return hexString.toUpperCase();
+	}
+
+	// Suppressing default constructor, ensuring non-instantiability
+	private Bytes() {}
+
 }

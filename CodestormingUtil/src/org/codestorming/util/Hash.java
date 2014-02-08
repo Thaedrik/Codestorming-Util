@@ -21,10 +21,6 @@ import java.security.NoSuchAlgorithmException;
  */
 public class Hash {
 
-	// Suppressing default constructor, ensuring non instantiability
-	private Hash() {
-	}
-
 	/**
 	 * Hash the given byte array into a md5 byte array.
 	 * 
@@ -63,4 +59,7 @@ public class Hash {
 		MessageDigest sha256Digest = MessageDigest.getInstance("SHA-256");
 		return sha256Digest.digest(toHash);
 	}
+
+	// Suppressing default constructor, ensuring non instantiability
+	private Hash() {}
 }
