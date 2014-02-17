@@ -55,12 +55,11 @@ public class FragmentedIntervalBuilder {
 	 * happens.
 	 * 
 	 * @param interval The interval to add.
-	 * @return {@code true} if the addition of the interval modifies this
-	 *         {@code FragmentedInterval};<br>
-	 *         {@code false} otherwise.
+	 * @return this {@code FragmentedIntervalBuilder}.
 	 */
-	public boolean addInterval(Interval interval) {
-		return this.interval.addInterval(interval);
+	public FragmentedIntervalBuilder addInterval(Interval interval) {
+		this.interval.addInterval(interval);
+		return this;
 	}
 
 	/**
@@ -69,21 +68,22 @@ public class FragmentedIntervalBuilder {
 	 * happens.
 	 * 
 	 * @param fragmentedInterval The interval to add.
-	 * @return {@code true} is the addition of the interval modifies this
-	 *         {@code FragmentedInterval};<br>
-	 *         {@code false} otherwise.
+	 * @return this {@code FragmentedIntervalBuilder}.
 	 */
-	public boolean addInterval(FragmentedInterval fragmentedInterval) {
-		return this.interval.addInterval(fragmentedInterval);
+	public FragmentedIntervalBuilder addInterval(FragmentedInterval fragmentedInterval) {
+		this.interval.addInterval(fragmentedInterval);
+		return this;
 	}
 
 	/**
 	 * Excludes the given {@link Interval} from the {@code FragmentedInterval}.
 	 * 
 	 * @param interval The {@link Interval} to exclude.
+	 * @return this {@code FragmentedIntervalBuilder}.
 	 */
-	public void exclude(Interval interval) {
+	public FragmentedIntervalBuilder exclude(Interval interval) {
 		this.interval.internalExclude(interval);
+		return this;
 	}
 
 	/**
@@ -91,9 +91,11 @@ public class FragmentedIntervalBuilder {
 	 * {@code FragmentedInterval}.
 	 * 
 	 * @param interval The {@link FragmentedInterval} to exclude.
+	 * @return this {@code FragmentedIntervalBuilder}.
 	 */
-	public void exclude(FragmentedInterval interval) {
+	public FragmentedIntervalBuilder exclude(FragmentedInterval interval) {
 		this.interval.internalExclude(interval);
+		return this;
 	}
 
 }
