@@ -123,4 +123,202 @@ public class Arrays2 {
 		valueArray[0] = value;
 		return insert(array, insertIndex, valueArray, 0, 1);
 	}
+
+	/**
+	 * Insert values into the given {@code array} at the specified {@code insertIndex}.
+	 * 
+	 * @param array The source array.
+	 * @param insertIndex Index of the given {@code array} into which the values will be
+	 *        inserted (between 0 and {@code array.length} included).
+	 * @param insertedValues Values to insert.
+	 * @param begin Index of the first element of {@code insertedValues} to insert.
+	 * @param end Index of the last element of {@code insertedValues} to insert +
+	 *        {@code 1}.
+	 * @return a new array with the content of the given {@code array} and the inserted
+	 *         values.
+	 */
+	public static byte[] insert(byte[] array, int insertIndex, byte[] insertedValues, int begin, int end) {
+		if (insertIndex < 0 || begin < 0 || end < 0 || insertIndex > array.length || begin > insertedValues.length - 1
+				|| end > insertedValues.length) {
+			throw new ArrayIndexOutOfBoundsException();
+		} else if (end < begin) {
+			throw new IllegalArgumentException("The end index cannot be lower than the begin index.");
+		}// else
+		byte[] newArray;
+		if (begin != end) {
+			final int newLength = array.length + (end - begin);
+			newArray = new byte[newLength];
+			System.arraycopy(array, 0, newArray, 0, insertIndex);
+			System.arraycopy(insertedValues, begin, newArray, insertIndex, end - begin);
+			System.arraycopy(array, insertIndex, newArray, insertIndex + end - begin, array.length - insertIndex);
+		} else {
+			newArray = array;
+		}
+		return newArray;
+	}
+
+	/**
+	 * Insert values into the given {@code array} at the specified {@code insertIndex}.
+	 * 
+	 * @param array The source array.
+	 * @param insertIndex Index of the given {@code array} into which the values will be
+	 *        inserted (between 0 and {@code array.length} included).
+	 * @param insertedValues Values to insert.
+	 * @param begin Index of the first element of {@code insertedValues} to insert.
+	 * @param end Index of the last element of {@code insertedValues} to insert +
+	 *        {@code 1}.
+	 * @return a new array with the content of the given {@code array} and the inserted
+	 *         values.
+	 */
+	public static short[] insert(short[] array, int insertIndex, byte[] insertedValues, int begin, int end) {
+		if (insertIndex < 0 || begin < 0 || end < 0 || insertIndex > array.length || begin > insertedValues.length - 1
+				|| end > insertedValues.length) {
+			throw new ArrayIndexOutOfBoundsException();
+		} else if (end < begin) {
+			throw new IllegalArgumentException("The end index cannot be lower than the begin index.");
+		}// else
+		short[] newArray;
+		if (begin != end) {
+			final int newLength = array.length + (end - begin);
+			newArray = new short[newLength];
+			System.arraycopy(array, 0, newArray, 0, insertIndex);
+			System.arraycopy(insertedValues, begin, newArray, insertIndex, end - begin);
+			System.arraycopy(array, insertIndex, newArray, insertIndex + end - begin, array.length - insertIndex);
+		} else {
+			newArray = array;
+		}
+		return newArray;
+	}
+
+	/**
+	 * Insert values into the given {@code array} at the specified {@code insertIndex}.
+	 * 
+	 * @param array The source array.
+	 * @param insertIndex Index of the given {@code array} into which the values will be
+	 *        inserted (between 0 and {@code array.length} included).
+	 * @param insertedValues Values to insert.
+	 * @param begin Index of the first element of {@code insertedValues} to insert.
+	 * @param end Index of the last element of {@code insertedValues} to insert +
+	 *        {@code 1}.
+	 * @return a new array with the content of the given {@code array} and the inserted
+	 *         values.
+	 */
+	public static int[] insert(int[] array, int insertIndex, int[] insertedValues, int begin, int end) {
+		if (insertIndex < 0 || begin < 0 || end < 0 || insertIndex > array.length || begin > insertedValues.length - 1
+				|| end > insertedValues.length) {
+			throw new ArrayIndexOutOfBoundsException();
+		} else if (end < begin) {
+			throw new IllegalArgumentException("The end index cannot be lower than the begin index.");
+		}// else
+		int[] newArray;
+		if (begin != end) {
+			final int newLength = array.length + (end - begin);
+			newArray = new int[newLength];
+			System.arraycopy(array, 0, newArray, 0, insertIndex);
+			System.arraycopy(insertedValues, begin, newArray, insertIndex, end - begin);
+			System.arraycopy(array, insertIndex, newArray, insertIndex + end - begin, array.length - insertIndex);
+		} else {
+			newArray = array;
+		}
+		return newArray;
+	}
+
+	/**
+	 * Insert values into the given {@code array} at the specified {@code insertIndex}.
+	 * 
+	 * @param array The source array.
+	 * @param insertIndex Index of the given {@code array} into which the values will be
+	 *        inserted (between 0 and {@code array.length} included).
+	 * @param insertedValues Values to insert.
+	 * @param begin Index of the first element of {@code insertedValues} to insert.
+	 * @param end Index of the last element of {@code insertedValues} to insert +
+	 *        {@code 1}.
+	 * @return a new array with the content of the given {@code array} and the inserted
+	 *         values.
+	 */
+	public static long[] insert(long[] array, int insertIndex, long[] insertedValues, int begin, int end) {
+		if (insertIndex < 0 || begin < 0 || end < 0 || insertIndex > array.length || begin > insertedValues.length - 1
+				|| end > insertedValues.length) {
+			throw new ArrayIndexOutOfBoundsException();
+		} else if (end < begin) {
+			throw new IllegalArgumentException("The end index cannot be lower than the begin index.");
+		}// else
+		long[] newArray;
+		if (begin != end) {
+			final int newLength = array.length + (end - begin);
+			newArray = new long[newLength];
+			System.arraycopy(array, 0, newArray, 0, insertIndex);
+			System.arraycopy(insertedValues, begin, newArray, insertIndex, end - begin);
+			System.arraycopy(array, insertIndex, newArray, insertIndex + end - begin, array.length - insertIndex);
+		} else {
+			newArray = array;
+		}
+		return newArray;
+	}
+
+	/**
+	 * Insert values into the given {@code array} at the specified {@code insertIndex}.
+	 * 
+	 * @param array The source array.
+	 * @param insertIndex Index of the given {@code array} into which the values will be
+	 *        inserted (between 0 and {@code array.length} included).
+	 * @param insertedValues Values to insert.
+	 * @param begin Index of the first element of {@code insertedValues} to insert.
+	 * @param end Index of the last element of {@code insertedValues} to insert +
+	 *        {@code 1}.
+	 * @return a new array with the content of the given {@code array} and the inserted
+	 *         values.
+	 */
+	public static double[] insert(double[] array, int insertIndex, double[] insertedValues, int begin, int end) {
+		if (insertIndex < 0 || begin < 0 || end < 0 || insertIndex > array.length || begin > insertedValues.length - 1
+				|| end > insertedValues.length) {
+			throw new ArrayIndexOutOfBoundsException();
+		} else if (end < begin) {
+			throw new IllegalArgumentException("The end index cannot be lower than the begin index.");
+		}// else
+		double[] newArray;
+		if (begin != end) {
+			final int newLength = array.length + (end - begin);
+			newArray = new double[newLength];
+			System.arraycopy(array, 0, newArray, 0, insertIndex);
+			System.arraycopy(insertedValues, begin, newArray, insertIndex, end - begin);
+			System.arraycopy(array, insertIndex, newArray, insertIndex + end - begin, array.length - insertIndex);
+		} else {
+			newArray = array;
+		}
+		return newArray;
+	}
+
+	/**
+	 * Insert values into the given {@code array} at the specified {@code insertIndex}.
+	 * 
+	 * @param array The source array.
+	 * @param insertIndex Index of the given {@code array} into which the values will be
+	 *        inserted (between 0 and {@code array.length} included).
+	 * @param insertedValues Values to insert.
+	 * @param begin Index of the first element of {@code insertedValues} to insert.
+	 * @param end Index of the last element of {@code insertedValues} to insert +
+	 *        {@code 1}.
+	 * @return a new array with the content of the given {@code array} and the inserted
+	 *         values.
+	 */
+	public static float[] insert(float[] array, int insertIndex, float[] insertedValues, int begin, int end) {
+		if (insertIndex < 0 || begin < 0 || end < 0 || insertIndex > array.length || begin > insertedValues.length - 1
+				|| end > insertedValues.length) {
+			throw new ArrayIndexOutOfBoundsException();
+		} else if (end < begin) {
+			throw new IllegalArgumentException("The end index cannot be lower than the begin index.");
+		}// else
+		float[] newArray;
+		if (begin != end) {
+			final int newLength = array.length + (end - begin);
+			newArray = new float[newLength];
+			System.arraycopy(array, 0, newArray, 0, insertIndex);
+			System.arraycopy(insertedValues, begin, newArray, insertIndex, end - begin);
+			System.arraycopy(array, insertIndex, newArray, insertIndex + end - begin, array.length - insertIndex);
+		} else {
+			newArray = array;
+		}
+		return newArray;
+	}
 }
