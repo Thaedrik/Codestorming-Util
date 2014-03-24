@@ -24,16 +24,32 @@ import org.codestorming.util.Logger.Severity;
  * @author Thaedrik <thaedrik@gmail.com>
  */
 public class BasicLogger implements Logger {
+	
+	protected volatile int filter = Severity.ERROR.getCode() | Severity.WARNING.getCode();
+
+	@Override
+	public void filter(Severity... severities) {
+		int filter = 0;
+		for (Severity severity : severities) {
+			filter |= severity.getCode();
+		}
+		this.filter = filter;
+	}
 
 	@Override
 	public void log(Severity severity, CharSequence message) {
-		PrintStream output;
-		if (severity == Severity.INFO || severity == Severity.WARNING) {
-			output = System.out;
-		} else {
-			output = System.err;
+		if ((severity.getCode() & filter) != 0) {
+			PrintStream output;
+			if (severity == Severity.INFO) {
+				output = System.out;
+			} else if (severity == Severity.WARNING) {
+				output = System.out;
+				message = "[WARNING] " + message;
+			} else {
+				output = System.err;
+			}
+			output.println(message);
 		}
-		output.println(message);
 	}
 
 	@Override
