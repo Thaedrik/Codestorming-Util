@@ -11,8 +11,11 @@
  ****************************************************************************/
 package org.codestorming.util.collection;
 
+import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -25,6 +28,12 @@ import java.util.ListIterator;
  * @see OrderedSet
  */
 public class Collections3 {
+
+	/**
+	 * The empty {@link OrderedSet} (immutable). This ordered set is serializable.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static final OrderedSet EMPTY_ORDERED_SET = new EmptyOrderedSet();
 
 	/**
 	 * Returns a <em>thread-safe</em> {@link OrderedSet} backed with the given one.
@@ -45,6 +54,17 @@ public class Collections3 {
 	 */
 	public static <T> OrderedSet<T> unmodifiableOrderedSet(OrderedSet<T> orderedSet) {
 		return new UnmodifiableOrderedSet<T>(orderedSet);
+	}
+
+	/**
+	 * Returns the empty {@link OrderedSet} (immutable). This ordered set is serializable.
+	 * 
+	 * @return the empty {@link OrderedSet} (immutable). This ordered set is serializable.
+	 * @see Collections3#EMPTY_ORDERED_SET EMPTY_ORDERED_SET
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> OrderedSet<T> emptyOrderedSet() {
+		return (OrderedSet<T>) EMPTY_ORDERED_SET;
 	}
 
 	private static class SynchronizedOrderedSet<E> implements OrderedSet<E>, Serializable {
@@ -326,6 +346,137 @@ public class Collections3 {
 
 		public String toString() {
 			return delegate.toString();
+		}
+	}
+
+	private static class EmptyOrderedSet implements OrderedSet<Object>, Serializable {
+
+		private static final long serialVersionUID = 564365190269344842L;
+
+		@Override
+		public int size() {
+			return 0;
+		}
+
+		@Override
+		public boolean isEmpty() {
+			return true;
+		}
+
+		@Override
+		public boolean contains(Object o) {
+			return false;
+		}
+
+		@Override
+		public Iterator<Object> iterator() {
+			return listIterator();
+		}
+
+		@Override
+		public Object[] toArray() {
+			return new Object[0];
+		}
+
+		@Override
+		public <T> T[] toArray(T[] a) {
+			int size = size();
+			@SuppressWarnings("unchecked")
+			T[] r = a.length >= size ? a : (T[]) Array.newInstance(a.getClass().getComponentType(), size);
+			return r;
+		}
+
+		@Override
+		public boolean add(Object e) {
+			throw new UnsupportedOperationException("Cannot modify the Empty OrderedSet");
+		}
+
+		@Override
+		public boolean remove(Object o) {
+			return false;
+		}
+
+		@Override
+		public boolean containsAll(Collection<?> c) {
+			return false;
+		}
+
+		@Override
+		public boolean addAll(Collection<? extends Object> c) {
+			throw new UnsupportedOperationException("Cannot modify the Empty OrderedSet");
+		}
+
+		@Override
+		public boolean addAll(int index, Collection<? extends Object> c) {
+			throw new UnsupportedOperationException("Cannot modify the Empty OrderedSet");
+		}
+
+		@Override
+		public boolean removeAll(Collection<?> c) {
+			return false;
+		}
+
+		@Override
+		public boolean retainAll(Collection<?> c) {
+			throw new UnsupportedOperationException("Cannot modify the Empty OrderedSet");
+		}
+
+		@Override
+		public void clear() {}
+
+		@Override
+		public Object get(int index) {
+			throw new IndexOutOfBoundsException("Index = " + index);
+		}
+
+		@Override
+		public Object set(int index, Object element) {
+			throw new UnsupportedOperationException("Cannot modify the Empty OrderedSet");
+		}
+
+		@Override
+		public void add(int index, Object element) {
+			throw new UnsupportedOperationException("Cannot modify the Empty OrderedSet");
+		}
+
+		@Override
+		public Object remove(int index) {
+			throw new UnsupportedOperationException("Cannot modify the Empty OrderedSet");
+		}
+
+		@Override
+		public int indexOf(Object o) {
+			return -1;
+		}
+
+		@Override
+		public int lastIndexOf(Object o) {
+			return -1;
+		}
+
+		@Override
+		public ListIterator<Object> listIterator() {
+			return listIterator(0);
+		}
+
+		@Override
+		public ListIterator<Object> listIterator(int index) {
+			if (index < 0 || index > size()) {
+				throw new IndexOutOfBoundsException("Index = " + index);
+			}// else
+			return Collections.emptyList().listIterator();
+		}
+
+		@Override
+		public List<Object> subList(int fromIndex, int toIndex) {
+			if (fromIndex < 0 || toIndex > size() || fromIndex > toIndex) {
+				throw new IndexOutOfBoundsException();
+			}// else
+			return Collections.emptyList();
+		}
+
+		private Object readResolve() throws ObjectStreamException {
+			return EMPTY_ORDERED_SET;
 		}
 	}
 
