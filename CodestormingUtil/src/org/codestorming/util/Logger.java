@@ -25,10 +25,35 @@ public interface Logger {
 	 * Severity level for {@code Logger}'s messages.
 	 */
 	public static enum Severity {
-		INFO,
-		WARNING,
-		ERROR
+		INFO(1),
+		WARNING(1 << 1),
+		ERROR(1 << 2);
+
+		private int code;
+
+		private Severity(int code) {
+			this.code = code;
+		}
+
+		/**
+		 * Returns this {@code Logger.Severity}'s code.
+		 * 
+		 * @return this {@code Logger.Severity}'s code.
+		 */
+		public int getCode() {
+			return code;
+		}
 	}
+
+	/**
+	 * Set the the {@link Severity severities} of the messages that can be logged. <br>
+	 * If no {@link Severity} is specified, no message will be logged.
+	 * <p>
+	 * By default, only errors and warnings are logged.
+	 * 
+	 * @param severities The {@link Severity severities} to allow.
+	 */
+	public void filter(Severity... severities);
 
 	/**
 	 * Logs the given {@code message} with the specified {@code severity}.
