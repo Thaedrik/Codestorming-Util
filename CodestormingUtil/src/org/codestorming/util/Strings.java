@@ -31,23 +31,45 @@ public class Strings {
 	 * @throws NullPointerException if {@code str} or {@code trim} are {@code null}.
 	 */
 	public static String trim(String str, String trim) {
+		return trim(str, trim, -1);
+	}
+
+	/**
+	 * Removes {@code number} <strong>trim</strong> strings at the beginning and at the
+	 * end of the given String <em>str</em>.
+	 * <p>
+	 * If {@code trim} is empty or if there is no {@code trim} string in {@code str},
+	 * nothing happens.
+	 * 
+	 * @param str The string to trim.
+	 * @param trim The string to remove from {@code str}.
+	 * @param number The number of {@code trim} strings to remove from the beginning and
+	 *        the end of {@code str}.
+	 * @return the trimmed string.
+	 * @throws NullPointerException if {@code str} or {@code trim} are {@code null}.
+	 */
+	public static String trim(String str, String trim, int number) {
 		if (str == null || trim == null) {
 			throw new NullPointerException();
 		}// else
 		final int trimLength = trim.length();
 		if (trimLength > 0) {
 			int start = 0;
+			int n = 0;
 
 			// Removing the trim string at the beginning
-			while (str.startsWith(trim, start)) {
+			while (str.startsWith(trim, start) && (number < 0 || n < number)) {
 				start += trimLength;
+				n++;
 			}
 			str = str.substring(start);
+			n = 0;
 
 			int count = str.length();
 			// Removing the trim string at the end
-			while (endsWith(str, trim, count)) {
+			while (endsWith(str, trim, count) && (number < 0 || n < number)) {
 				count -= trimLength;
+				n++;
 			}
 			str = str.substring(0, count);
 		}
@@ -96,6 +118,42 @@ public class Strings {
 			return a == b;
 		}// else
 		return a.equals(b);
+	}
+
+	/**
+	 * XXX Comment method
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static CharSequence toUpperFirst(CharSequence str) {
+		if (str.length() < 1) {
+			return str;
+		}// else
+		if (str instanceof StringBuilder) {
+			StringBuilder sb = (StringBuilder) str;
+			sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
+			return str;
+		}// else
+		return toUpperFirst(new StringBuilder(str));
+	}
+
+	/**
+	 * XXX Comment method
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static CharSequence toLowerFirst(CharSequence str) {
+		if (str.length() < 1) {
+			return str;
+		}// else
+		if (str instanceof StringBuilder) {
+			StringBuilder sb = (StringBuilder) str;
+			sb.setCharAt(0, Character.toLowerCase(sb.charAt(0)));
+			return str;
+		}// else
+		return toUpperFirst(new StringBuilder(str));
 	}
 
 	// Suppressing default constructor, ensuring non-instantiability
