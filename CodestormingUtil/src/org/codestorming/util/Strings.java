@@ -121,10 +121,10 @@ public class Strings {
 	}
 
 	/**
-	 * XXX Comment method
+	 * Set the first character of the given CharSequence in upper case.
 	 * 
-	 * @param str
-	 * @return
+	 * @param str The character sequence.
+	 * @return a new char sequence with its first character in upper case.
 	 */
 	public static CharSequence toUpperFirst(CharSequence str) {
 		if (str.length() < 1) {
@@ -139,10 +139,10 @@ public class Strings {
 	}
 
 	/**
-	 * XXX Comment method
+	 * Set the first character of the given CharSequence in lower case.
 	 * 
-	 * @param str
-	 * @return
+	 * @param str The character sequence.
+	 * @return a new char sequence with its first character in lower case.
 	 */
 	public static CharSequence toLowerFirst(CharSequence str) {
 		if (str.length() < 1) {
@@ -153,7 +153,7 @@ public class Strings {
 			sb.setCharAt(0, Character.toLowerCase(sb.charAt(0)));
 			return str;
 		}// else
-		return toUpperFirst(new StringBuilder(str));
+		return toLowerFirst(new StringBuilder(str));
 	}
 
 	// Suppressing default constructor, ensuring non-instantiability
