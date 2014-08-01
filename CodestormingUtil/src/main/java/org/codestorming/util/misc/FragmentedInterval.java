@@ -35,14 +35,6 @@ public final class FragmentedInterval implements Serializable {
 
 	private static final long serialVersionUID = 495398245222839620L;
 
-	TreeSet<IntervalMapKey> intervals = new TreeSet<IntervalMapKey>();
-
-	private TreeSet<TrailingIntervalMapKey> intervalsTrailing = new TreeSet<TrailingIntervalMapKey>();
-
-	private boolean isEmpty;
-
-	private transient String cachedString;
-
 	/**
 	 * Creates a new {@code FragmentedInterval} which is the exact copy of the given one.
 	 * 
@@ -56,6 +48,14 @@ public final class FragmentedInterval implements Serializable {
 		}
 		return copy;
 	}
+
+	TreeSet<IntervalMapKey> intervals = new TreeSet<IntervalMapKey>();
+
+	private TreeSet<TrailingIntervalMapKey> intervalsTrailing = new TreeSet<TrailingIntervalMapKey>();
+
+	private boolean isEmpty;
+
+	private transient String cachedString;
 
 	/**
 	 * Creates a new {@code FragmentedInterval} with the <strong>empty</strong>
@@ -128,11 +128,11 @@ public final class FragmentedInterval implements Serializable {
 	 * @return the intervals composing this {@code FragmentedInterval}.
 	 */
 	public List<Interval> getIntervals() {
-		List<Interval> intervals = new ArrayList<Interval>(this.intervals.size());
-		for (IntervalMapKey mapKey : this.intervals) {
-			intervals.add(mapKey.interval);
+		List<Interval> itvls = new ArrayList<Interval>(intervals.size());
+		for (IntervalMapKey mapKey : intervals) {
+			itvls.add(mapKey.interval);
 		}
-		return Collections.unmodifiableList(intervals);
+		return Collections.unmodifiableList(itvls);
 	}
 
 	/**
@@ -175,7 +175,9 @@ public final class FragmentedInterval implements Serializable {
 			remove(after);
 			after = intervals.ceiling(after);
 		}
-		cachedString = null; // Reset cachedString
+		// Reset cachedString
+		cachedString = null;
+
 		final Interval newInterval = new Interval(minInfEndPoint, maxSupEndPoint);
 		return add(new IntervalMapKey(newInterval));
 	}
@@ -209,23 +211,23 @@ public final class FragmentedInterval implements Serializable {
 	}
 
 	boolean addAll(Collection<IntervalMapKey> mapKeys) {
-		final TreeSet<TrailingIntervalMapKey> intervalsTrailing = this.intervalsTrailing;
-		final TreeSet<IntervalMapKey> intervals = this.intervals;
+		final TreeSet<TrailingIntervalMapKey> itvlsTrailing = intervalsTrailing;
+		final TreeSet<IntervalMapKey> itvls = intervals;
 		boolean changed = false;
 		for (IntervalMapKey mapKey : mapKeys) {
-			intervalsTrailing.add(new TrailingIntervalMapKey(mapKey.interval));
-			changed |= intervals.add(mapKey);
+			itvlsTrailing.add(new TrailingIntervalMapKey(mapKey.interval));
+			changed |= itvls.add(mapKey);
 		}
 		return changed;
 	}
 
 	boolean removeAll(Collection<IntervalMapKey> mapKeys) {
-		final TreeSet<TrailingIntervalMapKey> intervalsTrailing = this.intervalsTrailing;
-		final TreeSet<IntervalMapKey> intervals = this.intervals;
+		final TreeSet<TrailingIntervalMapKey> itvlsTrailing = this.intervalsTrailing;
+		final TreeSet<IntervalMapKey> itvls = this.intervals;
 		boolean changed = false;
 		for (IntervalMapKey mapKey : mapKeys) {
-			intervalsTrailing.remove(new TrailingIntervalMapKey(mapKey.interval));
-			changed |= intervals.remove(mapKey);
+			itvlsTrailing.remove(new TrailingIntervalMapKey(mapKey.interval));
+			changed |= itvls.remove(mapKey);
 		}
 		return changed;
 	}
@@ -447,7 +449,9 @@ public final class FragmentedInterval implements Serializable {
 		return new FragmentedInterval();
 	}
 
-	static FragmentedInterval internalExclusiveUnion(Interval i1, Interval i2) {
+	static FragmentedInterval internalExclusiveUnion(Interval interval1, Interval interval2) {
+		Interval i1 = interval1;
+		Interval i2 = interval2;
 		FragmentedInterval newInterval;
 		if (!i1.intersect(i2)) {
 			newInterval = new FragmentedInterval(i1, i2);
@@ -501,14 +505,18 @@ public final class FragmentedInterval implements Serializable {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (obj == this)
+			if (obj == this) {
 				return true;
-			if (obj == null)
+			}
+			if (obj == null) {
 				return false;
-			if (obj instanceof Long)
+			}
+			if (obj instanceof Long) {
 				return interval.contains((Long) obj);
-			if (!type.isInstance(obj))
+			}
+			if (!type.isInstance(obj)) {
 				return false;
+			}
 
 			return compareTo(type.cast(obj)) == 0;
 		}

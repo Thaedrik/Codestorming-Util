@@ -53,27 +53,27 @@ public class Strings {
 			throw new NullPointerException();
 		}// else
 		final int trimLength = trim.length();
+		String trimmed = str;
 		if (trimLength > 0) {
+			final boolean infinite = number < 0;
 			int start = 0;
-			int n = 0;
+			int n;
 
 			// Removing the trim string at the beginning
-			while (str.startsWith(trim, start) && (number < 0 || n < number)) {
+			for (n = 0; trimmed.startsWith(trim, start) && (infinite || n < number); n++) {
 				start += trimLength;
-				n++;
 			}
-			str = str.substring(start);
-			n = 0;
+			int end = trimmed.length();
 
-			int count = str.length();
-			// Removing the trim string at the end
-			while (endsWith(str, trim, count) && (number < 0 || n < number)) {
-				count -= trimLength;
-				n++;
+			if (end > start) {
+				// Removing the trim string at the end
+				for (n = 0; endsWith(trimmed, trim, end) && (infinite || n < number); n++) {
+					end -= trimLength;
+				}
 			}
-			str = str.substring(0, count);
+			trimmed = trimmed.substring(start, end);
 		}
-		return str;
+		return trimmed;
 	}
 
 	/**

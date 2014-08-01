@@ -55,4 +55,7 @@ public class FileHelper {
 			throw new FileNotFoundException(MessageFormat.format(message, file.getName()));
 		}
 	}
+
+	// Suppressing default constructor, ensuring non instantiability
+	private FileHelper() {}
 }

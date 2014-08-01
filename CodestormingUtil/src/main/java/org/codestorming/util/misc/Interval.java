@@ -164,10 +164,11 @@ public class Interval implements Serializable {
 	 *         {@code false} otherwise.
 	 */
 	public boolean intersect(Interval interval) {
-		return empty
-				|| interval.empty
-				|| (contains(interval.getInferiorEndPoint()) || contains(interval.getSuperiorEndPoint())
-						|| interval.contains(getInferiorEndPoint()) || interval.contains(getSuperiorEndPoint()));
+		boolean intervalContainsPartOfThis = contains(interval.getInferiorEndPoint())
+				|| contains(interval.getSuperiorEndPoint());
+		boolean thisContainsPartofInterval = interval.contains(getInferiorEndPoint())
+				|| interval.contains(getSuperiorEndPoint());
+		return empty || interval.empty || intervalContainsPartOfThis || thisContainsPartofInterval;
 	}
 
 	/**
@@ -264,12 +265,15 @@ public class Interval implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == this)
+		if (obj == this) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (!(obj instanceof Interval))
+		}
+		if (!(obj instanceof Interval)) {
 			return false;
+		}
 		Interval other = (Interval) obj;
 		if (empty) {
 			return other.isEmpty();

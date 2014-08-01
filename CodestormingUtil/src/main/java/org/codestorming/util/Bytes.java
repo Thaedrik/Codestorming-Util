@@ -18,6 +18,8 @@ package org.codestorming.util;
  */
 public class Bytes {
 
+	private static final String INCORRECT_ARRAY_LENGTH = "The array's length is incorrect : ";
+
 	/**
 	 * Create an array of four bytes corresponding to the given integer in big-endian.
 	 * 
@@ -44,7 +46,7 @@ public class Bytes {
 	public static int byteArrayToInt(byte[] byteArray) {
 		final int length = byteArray.length;
 		if (length < 1 || length > 4) {
-			throw new IllegalArgumentException("The array's length is incorrect : " + byteArray.length);
+			throw new IllegalArgumentException(INCORRECT_ARRAY_LENGTH + byteArray.length);
 		}// else
 		int integer = 0;
 		for (int i = length - 1; i >= 0; i--) {
@@ -84,7 +86,7 @@ public class Bytes {
 	 */
 	public static long byteArrayToLong(byte[] byteArray) {
 		if (byteArray.length != 8) {
-			throw new IllegalArgumentException("The array's length is incorrect : " + byteArray.length);
+			throw new IllegalArgumentException(INCORRECT_ARRAY_LENGTH + byteArray.length);
 		}// else
 		long longInt = 0;
 		longInt |= (long) (0xFF & byteArray[0]) << 56;

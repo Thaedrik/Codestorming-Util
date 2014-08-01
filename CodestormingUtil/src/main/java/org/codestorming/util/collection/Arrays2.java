@@ -22,8 +22,15 @@ import java.util.Arrays;
  */
 public class Arrays2 {
 
-	// Suppressing default constructor, ensuring non-instantiability
-	private Arrays2() {}
+	private static final String END_INDEX_INVALID = "The end index cannot be lower than the begin index.";
+
+	private static void checkIndexes(int... indexes) {
+		for (int index : indexes) {
+			if (index < 0) {
+				throw new ArrayIndexOutOfBoundsException(index);
+			}
+		}
+	}
 
 	/**
 	 * Returns a new array built with the given one for which the elements between
@@ -41,10 +48,11 @@ public class Arrays2 {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T[] remove(T[] array, int begin, int end) {
-		if (begin < 0 || end < 0 || begin > array.length - 1 || end > array.length) {
+		checkIndexes(begin, end);
+		if (begin > array.length - 1 || end > array.length) {
 			throw new ArrayIndexOutOfBoundsException();
 		} else if (end < begin) {
-			throw new IllegalArgumentException("The end index cannot be lower than the begin index.");
+			throw new IllegalArgumentException(END_INDEX_INVALID);
 		}// else
 		T[] newArray;
 		if (begin != end) {
@@ -88,11 +96,11 @@ public class Arrays2 {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T[] insert(T[] array, int insertIndex, T[] insertedValues, int begin, int end) {
-		if (insertIndex < 0 || begin < 0 || end < 0 || insertIndex > array.length || begin > insertedValues.length - 1
-				|| end > insertedValues.length) {
+		checkIndexes(insertIndex, begin, end);
+		if (insertIndex > array.length || begin > insertedValues.length - 1 || end > insertedValues.length) {
 			throw new ArrayIndexOutOfBoundsException();
 		} else if (end < begin) {
-			throw new IllegalArgumentException("The end index cannot be lower than the begin index.");
+			throw new IllegalArgumentException(END_INDEX_INVALID);
 		}// else
 		T[] newArray;
 		if (begin != end) {
@@ -138,11 +146,11 @@ public class Arrays2 {
 	 *         values.
 	 */
 	public static byte[] insert(byte[] array, int insertIndex, byte[] insertedValues, int begin, int end) {
-		if (insertIndex < 0 || begin < 0 || end < 0 || insertIndex > array.length || begin > insertedValues.length - 1
-				|| end > insertedValues.length) {
+		checkIndexes(insertIndex, begin, end);
+		if (insertIndex > array.length || begin > insertedValues.length - 1 || end > insertedValues.length) {
 			throw new ArrayIndexOutOfBoundsException();
 		} else if (end < begin) {
-			throw new IllegalArgumentException("The end index cannot be lower than the begin index.");
+			throw new IllegalArgumentException(END_INDEX_INVALID);
 		}// else
 		byte[] newArray;
 		if (begin != end) {
@@ -171,11 +179,11 @@ public class Arrays2 {
 	 *         values.
 	 */
 	public static short[] insert(short[] array, int insertIndex, byte[] insertedValues, int begin, int end) {
-		if (insertIndex < 0 || begin < 0 || end < 0 || insertIndex > array.length || begin > insertedValues.length - 1
-				|| end > insertedValues.length) {
+		checkIndexes(insertIndex, begin, end);
+		if (insertIndex > array.length || begin > insertedValues.length - 1 || end > insertedValues.length) {
 			throw new ArrayIndexOutOfBoundsException();
 		} else if (end < begin) {
-			throw new IllegalArgumentException("The end index cannot be lower than the begin index.");
+			throw new IllegalArgumentException(END_INDEX_INVALID);
 		}// else
 		short[] newArray;
 		if (begin != end) {
@@ -204,11 +212,11 @@ public class Arrays2 {
 	 *         values.
 	 */
 	public static int[] insert(int[] array, int insertIndex, int[] insertedValues, int begin, int end) {
-		if (insertIndex < 0 || begin < 0 || end < 0 || insertIndex > array.length || begin > insertedValues.length - 1
-				|| end > insertedValues.length) {
+		checkIndexes(insertIndex, begin, end);
+		if (insertIndex > array.length || begin > insertedValues.length - 1 || end > insertedValues.length) {
 			throw new ArrayIndexOutOfBoundsException();
 		} else if (end < begin) {
-			throw new IllegalArgumentException("The end index cannot be lower than the begin index.");
+			throw new IllegalArgumentException(END_INDEX_INVALID);
 		}// else
 		int[] newArray;
 		if (begin != end) {
@@ -237,11 +245,11 @@ public class Arrays2 {
 	 *         values.
 	 */
 	public static long[] insert(long[] array, int insertIndex, long[] insertedValues, int begin, int end) {
-		if (insertIndex < 0 || begin < 0 || end < 0 || insertIndex > array.length || begin > insertedValues.length - 1
-				|| end > insertedValues.length) {
+		checkIndexes(insertIndex, begin, end);
+		if (insertIndex > array.length || begin > insertedValues.length - 1 || end > insertedValues.length) {
 			throw new ArrayIndexOutOfBoundsException();
 		} else if (end < begin) {
-			throw new IllegalArgumentException("The end index cannot be lower than the begin index.");
+			throw new IllegalArgumentException(END_INDEX_INVALID);
 		}// else
 		long[] newArray;
 		if (begin != end) {
@@ -270,11 +278,11 @@ public class Arrays2 {
 	 *         values.
 	 */
 	public static double[] insert(double[] array, int insertIndex, double[] insertedValues, int begin, int end) {
-		if (insertIndex < 0 || begin < 0 || end < 0 || insertIndex > array.length || begin > insertedValues.length - 1
-				|| end > insertedValues.length) {
+		checkIndexes(insertIndex, begin, end);
+		if (insertIndex > array.length || begin > insertedValues.length - 1 || end > insertedValues.length) {
 			throw new ArrayIndexOutOfBoundsException();
 		} else if (end < begin) {
-			throw new IllegalArgumentException("The end index cannot be lower than the begin index.");
+			throw new IllegalArgumentException(END_INDEX_INVALID);
 		}// else
 		double[] newArray;
 		if (begin != end) {
@@ -303,11 +311,11 @@ public class Arrays2 {
 	 *         values.
 	 */
 	public static float[] insert(float[] array, int insertIndex, float[] insertedValues, int begin, int end) {
-		if (insertIndex < 0 || begin < 0 || end < 0 || insertIndex > array.length || begin > insertedValues.length - 1
-				|| end > insertedValues.length) {
+		checkIndexes(insertIndex, begin, end);
+		if (insertIndex > array.length || begin > insertedValues.length - 1 || end > insertedValues.length) {
 			throw new ArrayIndexOutOfBoundsException();
 		} else if (end < begin) {
-			throw new IllegalArgumentException("The end index cannot be lower than the begin index.");
+			throw new IllegalArgumentException(END_INDEX_INVALID);
 		}// else
 		float[] newArray;
 		if (begin != end) {
@@ -321,4 +329,7 @@ public class Arrays2 {
 		}
 		return newArray;
 	}
+
+	// Suppressing default constructor, ensuring non-instantiability
+	private Arrays2() {}
 }

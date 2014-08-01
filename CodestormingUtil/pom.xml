@@ -3,14 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.codestorming</groupId>
 	<artifactId>codestorming-util</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0-SNAPSHOT</version>
 	<name>Codestorming - Util</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
-		<testSourceDirectory>src/main/test</testSourceDirectory>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -37,14 +37,14 @@
 	</build>
 	<distributionManagement>
 		<repository>
-			<id>codestorming-maven</id>
+			<id>codestorming-maven-public-releases</id>
 			<name>Codestorming Maven Repository</name>
 			<layout>default</layout>
 			<uniqueVersion>false</uniqueVersion>
 			<url>https://mvn.codestorming.org/content/repositories/public_releases</url>
 		</repository>
 		<snapshotRepository>
-			<id>codestorming-maven</id>
+			<id>codestorming-maven-public-snapshots</id>
 			<name>Codestorming Maven Repository</name>
 			<layout>default</layout>
 			<uniqueVersion>true</uniqueVersion>

@@ -148,7 +148,6 @@ public class MutableFragmentedInterval {
 		if (after == null) {
 			after = delegate.intervals.last();
 		}
-		// FragmentedInterval newOne = copyOf(this);
 		if (before != null && after != null) {
 			final List<IntervalMapKey> subset = new ArrayList<IntervalMapKey>(delegate.intervals.subSet(before, true,
 					after, true));

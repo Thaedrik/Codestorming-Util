@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.RandomAccess;
+import java.util.Set;
 
 /**
  * This class implements the {@link OrderedSet} interface. It is backed by
@@ -57,7 +58,7 @@ public class OrderedHashSet<E> implements OrderedSet<E>, RandomAccess, Cloneable
 	/**
 	 * Internal {@code HashSet}.
 	 */
-	private transient HashSet<E> internalSet;
+	private transient Set<E> internalSet;
 
 	/**
 	 * Internal sequential collection of the elements put in the set
@@ -237,10 +238,13 @@ public class OrderedHashSet<E> implements OrderedSet<E>, RandomAccess, Cloneable
 		Iterator<E> it = iterator();
 
 		for (int i = 0; i < r.length; i++) {
-			if (!it.hasNext()) { // fewer elements than expected
-				if (a != r)
+			if (!it.hasNext()) {
+				// fewer elements than expected
+				if (a != r) {
 					return Arrays.copyOf(r, i);
-				r[i] = null; // null-terminate
+				}
+				// null-terminate
+				r[i] = null;
 				return r;
 			}
 			r[i] = (T) it.next();
@@ -262,22 +266,24 @@ public class OrderedHashSet<E> implements OrderedSet<E>, RandomAccess, Cloneable
 	 */
 	@SuppressWarnings("unchecked")
 	private static <T> T[] finishToArray(T[] r, Iterator<?> it) {
+		T[] array = r;
 		int i = r.length;
 		while (it.hasNext()) {
-			int cap = r.length;
+			int cap = array.length;
 			if (i == cap) {
 				int newCap = ((cap / 2) + 1) * 3;
 				if (newCap <= cap) { // integer overflow
-					if (cap == Integer.MAX_VALUE)
+					if (cap == Integer.MAX_VALUE) {
 						throw new OutOfMemoryError("Required array size too large");
+					}
 					newCap = Integer.MAX_VALUE;
 				}
-				r = Arrays.copyOf(r, newCap);
+				array = Arrays.copyOf(array, newCap);
 			}
-			r[i++] = (T) it.next();
+			array[i++] = (T) it.next();
 		}
 		// trim if overallocated
-		return (i == r.length) ? r : Arrays.copyOf(r, i);
+		return (i == array.length) ? array : Arrays.copyOf(array, i);
 	}
 
 	@Override
@@ -286,7 +292,7 @@ public class OrderedHashSet<E> implements OrderedSet<E>, RandomAccess, Cloneable
 		try {
 			OrderedHashSet<E> clone = (OrderedHashSet<E>) super.clone();
 			clone.elements = Arrays.copyOf(elements, size());
-			clone.internalSet = (HashSet<E>) internalSet.clone();
+			clone.internalSet = (HashSet<E>) ((HashSet<E>) internalSet).clone();
 			return clone;
 		} catch (CloneNotSupportedException ignore) {
 			// Should not happen, we are cloneable
@@ -419,17 +425,17 @@ public class OrderedHashSet<E> implements OrderedSet<E>, RandomAccess, Cloneable
 
 	@Override
 	public int indexOf(Object o) {
-		final E[] elements = this.elements;
+		final E[] elts = elements;
 		final int size = size();
 		if (o == null) {
 			for (int i = 0; i < size; i++) {
-				if (elements[i] == null) {
+				if (elts[i] == null) {
 					return i;
 				}
 			}
 		} else {
 			for (int i = 0; i < size; i++) {
-				if (o.equals(elements[i])) {
+				if (o.equals(elts[i])) {
 					return i;
 				}
 			}
@@ -456,12 +462,12 @@ public class OrderedHashSet<E> implements OrderedSet<E>, RandomAccess, Cloneable
 	@Override
 	public List<E> subList(int fromIndex, int toIndex) {
 		throw new UnsupportedOperationException();
-	};
+	}
 
 	@SuppressWarnings("unchecked")
-	private void ensureCapacity(int newCapacity) {
-		final int minCapacity = newCapacity;
+	private void ensureCapacity(int minCapacity) {
 		final int capacity = elements.length;
+		int newCapacity = minCapacity;
 		if (newCapacity > capacity) {
 			newCapacity = (int) (newCapacity * (loadFactor + 1)) + 1;
 			if (newCapacity < minCapacity) {

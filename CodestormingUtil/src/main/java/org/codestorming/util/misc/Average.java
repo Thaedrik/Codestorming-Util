@@ -93,11 +93,11 @@ public class Average implements Serializable {
 	}
 
 	private void recompute() {
-		double average = values[0] / size;
+		double avg = values[0] / size;
 		for (int i = 1; i < size; i++) {
-			average += values[i] / size;
+			avg += values[i] / size;
 		}
-		this.average = average;
+		average = avg;
 	}
 
 	/**

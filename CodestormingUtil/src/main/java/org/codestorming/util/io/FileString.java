@@ -33,6 +33,13 @@ public class FileString implements CharSequence {
 
 	protected File file;
 
+	/**
+	 * The input stream to load.
+	 * 
+	 * @since 1.1
+	 */
+	protected InputStream inputStream;
+
 	private Charset charset;
 
 	private char[] content;
@@ -41,20 +48,28 @@ public class FileString implements CharSequence {
 
 	private FutureTask<Boolean> loader;
 
+	/** This {@code FileString}'s hashcode */
+	private int hash;
+
 	/**
 	 * Creates a new {@code FileString} with the given {@link File file}.
 	 * 
 	 * @param file
 	 * @param charset
+	 * @throws NullPointerException if the given file or charset is {@code null}.
 	 * @throws IllegalArgumentException if the given file is not a <em>normal file</em>.
 	 * @see File#isFile()
 	 */
 	public FileString(File file, Charset charset) {
-		assert file != null;
+		if (file == null) {
+			throw new NullPointerException();
+		}// else
+		if (charset == null) {
+			throw new NullPointerException();
+		}// else
 		if (!file.exists()) {
 			throw new IllegalArgumentException("The given file doesn't exist.");
 		}// else
-
 		if (!file.isFile()) {
 			throw new IllegalArgumentException("The given file is not a 'normal' file");
 		}// else
@@ -65,9 +80,31 @@ public class FileString implements CharSequence {
 	}
 
 	/**
+	 * Creates a new {@code FileString} with the given {@link InputStream}.
+	 * 
+	 * @param in
+	 * @param charset
+	 * @throws NullPointerException if the given stream or charset is {@code null}.
+	 * @since 1.1
+	 */
+	public FileString(InputStream in, Charset charset) {
+		if (in == null) {
+			throw new NullPointerException();
+		}// else
+		if (charset == null) {
+			throw new NullPointerException();
+		}// else
+		assert in != null;
+		this.inputStream = in;
+		this.charset = charset;
+		load();
+	}
+
+	/**
 	 * Creates a new {@code FileString} with the given {@link File file}.
 	 * 
 	 * @param file
+	 * @throws NullPointerException if the given file is {@code null}.
 	 * @throws IllegalArgumentException if the given file is not a <em>normal file</em>.
 	 * @see File#isFile()
 	 */
@@ -81,13 +118,17 @@ public class FileString implements CharSequence {
 			public Boolean call() throws Exception {
 				final CharsetDecoder decoder = charset.newDecoder().onMalformedInput(CodingErrorAction.REPLACE)
 						.onUnmappableCharacter(CodingErrorAction.REPLACE);
-				FileInputStream fis = null;
+				InputStream input = null;
 				byte[] buffer = new byte[1024];
 				try {
 					content = new char[getInitialCapacity()];
-					fis = new FileInputStream(file);
+					if (file != null) {
+						input = new FileInputStream(file);
+					} else if (inputStream != null) {
+						input = inputStream;
+					}
 					int len = 0;
-					while ((len = fis.read(buffer)) > 0) {
+					while ((len = input.read(buffer)) > 0) {
 						final CharBuffer charBuffer = decoder.decode(ByteBuffer.wrap(buffer, 0, len));
 						final int length = charBuffer.length();
 						ensureCapacity(size + length);
@@ -96,10 +137,10 @@ public class FileString implements CharSequence {
 					}
 					return true;
 				} catch (IOException e) {
-					e.printStackTrace();
+					System.err.println(e.getMessage());
 					return false;
 				} finally {
-					FileHelper.close(fis);
+					FileHelper.close(input);
 				}
 			}
 		});
@@ -128,6 +169,9 @@ public class FileString implements CharSequence {
 	 * @return the initial capacity of this char sequence.
 	 */
 	private int getInitialCapacity() {
+		if (file == null) {
+			return 1024;
+		}// else
 		long length = file.length();
 		if (length > Integer.MAX_VALUE) {
 			length = Integer.MAX_VALUE / 2;
@@ -197,11 +241,14 @@ public class FileString implements CharSequence {
 
 	/**
 	 * Flush the content into the file.
+	 * <p>
+	 * This method will do nothing if this {@code FileString} has been created from an
+	 * {@link InputStream}.
 	 * 
 	 * @throws IOException
 	 */
 	public synchronized void flush() throws IOException {
-		if (!ready()) {
+		if (file == null || !ready()) {
 			return;
 		}// else
 
@@ -209,8 +256,6 @@ public class FileString implements CharSequence {
 		try {
 			fos = new FileOutputStream(file, false);
 			fos.write(toString().getBytes());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} finally {
 			FileHelper.close(fos);
 		}
@@ -229,25 +274,36 @@ public class FileString implements CharSequence {
 		if (this == anObject) {
 			return true;
 		}// else
-		if (anObject == null) {
+		if (!(anObject instanceof CharSequence)) {
 			return false;
 		}// else
-		if (anObject instanceof CharSequence) {
-			CharSequence anotherSequence = (CharSequence) anObject;
-			int n = size;
-			if (n == anotherSequence.length()) {
-				char v1[] = content;
-				int i = 0;
-				while (n-- != 0) {
-					if (v1[i] != anotherSequence.charAt(i)) {
-						return false;
-					}
-					i++;
-				}
-				return true;
+		final CharSequence other = (CharSequence) anObject;
+		if (size != other.length()) {
+			return false;
+		}// else
+		final char[] chars = content;
+		for (int i = 0, n = size; i < n; i++) {
+			if (chars[i] != other.charAt(i)) {
+				return false;
 			}
 		}
-		return false;
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		if (!ready()) {
+			return 0;
+		}// else
+		int h = hash;
+		if (h == 0 && content.length > 0) {
+			final char val[] = content;
+			for (int i = 0, n = val.length; i < n; i++) {
+				h = 31 * h + val[i];
+			}
+			hash = h;
+		}
+		return h;
 	}
 
 	/**
@@ -262,7 +318,7 @@ public class FileString implements CharSequence {
 		try {
 			return loader.get();
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 			return false;
 		}
 	}

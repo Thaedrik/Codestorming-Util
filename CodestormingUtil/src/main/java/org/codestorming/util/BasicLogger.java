@@ -34,25 +34,28 @@ public class BasicLogger implements Logger {
 	 */
 	@Override
 	public void filter(Severity... severities) {
-		int filter = 0;
+		int severityFilter = 0;
 		for (Severity severity : severities) {
-			filter |= severity.getCode();
+			severityFilter |= severity.getCode();
 		}
-		this.filter = filter;
+		filter = severityFilter;
 	}
 
 	@Override
 	public void log(Severity severity, CharSequence message) {
 		if ((severity.getCode() & filter) != 0) {
 			PrintStream output;
+			String prefix = "";
 			if (severity == Severity.INFO) {
 				output = System.out;
 			} else if (severity == Severity.WARNING) {
 				output = System.out;
-				message = "[WARNING] " + message;
+				prefix = "[WARNING] ";
 			} else {
 				output = System.err;
+				prefix = "[ERROR] ";
 			}
+			output.print(prefix);
 			output.println(message);
 		}
 	}

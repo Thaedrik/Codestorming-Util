@@ -352,6 +352,7 @@ public class Collections3 {
 	private static class EmptyOrderedSet implements OrderedSet<Object>, Serializable {
 
 		private static final long serialVersionUID = 564365190269344842L;
+		private static final String UNMODIFIABLE = "Cannot modify the Empty OrderedSet";
 
 		@Override
 		public int size() {
@@ -379,16 +380,15 @@ public class Collections3 {
 		}
 
 		@Override
+		@SuppressWarnings("unchecked")
 		public <T> T[] toArray(T[] a) {
 			int size = size();
-			@SuppressWarnings("unchecked")
-			T[] r = a.length >= size ? a : (T[]) Array.newInstance(a.getClass().getComponentType(), size);
-			return r;
+			return a.length >= size ? a : (T[]) Array.newInstance(a.getClass().getComponentType(), size);
 		}
 
 		@Override
 		public boolean add(Object e) {
-			throw new UnsupportedOperationException("Cannot modify the Empty OrderedSet");
+			throw new UnsupportedOperationException(UNMODIFIABLE);
 		}
 
 		@Override
@@ -403,12 +403,12 @@ public class Collections3 {
 
 		@Override
 		public boolean addAll(Collection<? extends Object> c) {
-			throw new UnsupportedOperationException("Cannot modify the Empty OrderedSet");
+			throw new UnsupportedOperationException(UNMODIFIABLE);
 		}
 
 		@Override
 		public boolean addAll(int index, Collection<? extends Object> c) {
-			throw new UnsupportedOperationException("Cannot modify the Empty OrderedSet");
+			throw new UnsupportedOperationException(UNMODIFIABLE);
 		}
 
 		@Override
@@ -418,11 +418,13 @@ public class Collections3 {
 
 		@Override
 		public boolean retainAll(Collection<?> c) {
-			throw new UnsupportedOperationException("Cannot modify the Empty OrderedSet");
+			throw new UnsupportedOperationException(UNMODIFIABLE);
 		}
 
 		@Override
-		public void clear() {}
+		public void clear() {
+			// Does nothing, it is already empty
+		}
 
 		@Override
 		public Object get(int index) {
@@ -431,17 +433,17 @@ public class Collections3 {
 
 		@Override
 		public Object set(int index, Object element) {
-			throw new UnsupportedOperationException("Cannot modify the Empty OrderedSet");
+			throw new UnsupportedOperationException(UNMODIFIABLE);
 		}
 
 		@Override
 		public void add(int index, Object element) {
-			throw new UnsupportedOperationException("Cannot modify the Empty OrderedSet");
+			throw new UnsupportedOperationException(UNMODIFIABLE);
 		}
 
 		@Override
 		public Object remove(int index) {
-			throw new UnsupportedOperationException("Cannot modify the Empty OrderedSet");
+			throw new UnsupportedOperationException(UNMODIFIABLE);
 		}
 
 		@Override
