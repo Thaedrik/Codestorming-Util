@@ -168,7 +168,8 @@ public class Interval implements Serializable {
 				|| contains(interval.getSuperiorEndPoint());
 		boolean thisContainsPartofInterval = interval.contains(getInferiorEndPoint())
 				|| interval.contains(getSuperiorEndPoint());
-		return empty || interval.empty || intervalContainsPartOfThis || thisContainsPartofInterval;
+		return empty && interval.empty ||
+				!empty && !interval.empty && (intervalContainsPartOfThis || thisContainsPartofInterval);
 	}
 
 	/**
@@ -232,6 +233,8 @@ public class Interval implements Serializable {
 				newInterval = new Interval(getInferiorEndPoint(), interval.getSuperiorEndPoint());
 			} else if (interval.isPreviousOf(this)) {
 				newInterval = new Interval(interval.getInferiorEndPoint(), getSuperiorEndPoint());
+			} else if (interval.isEmpty()) {
+				newInterval = new Interval(getInferiorEndPoint(), getSuperiorEndPoint());
 			} else {
 				throw new NotContiguousIntervalException();
 			}
