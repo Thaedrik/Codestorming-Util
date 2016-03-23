@@ -26,7 +26,7 @@ import java.util.TreeSet;
  * A {@code FragmentedInterval} is <em>non-mutable</em> and may be created by passing
  * {@link Interval intervals} to the constructor or by using the
  * {@link FragmentedIntervalBuilder}.
- * 
+ *
  * @author Thaedrik <thaedrik@gmail.com>
  * @see Interval
  * @see FragmentedIntervalBuilder
@@ -37,7 +37,7 @@ public final class FragmentedInterval implements Serializable {
 
 	/**
 	 * Creates a new {@code FragmentedInterval} which is the exact copy of the given one.
-	 * 
+	 *
 	 * @param interval The {@code FragmentedInterval} to copy.
 	 * @return a copy of the given {@code FragmentedInterval}.
 	 */
@@ -68,7 +68,7 @@ public final class FragmentedInterval implements Serializable {
 
 	/**
 	 * Creates a new {@code FragmentedInterval}.
-	 * 
+	 *
 	 * @param intervals {@link Interval Intervals} which composes this
 	 *        {@code FragmentedInterval}.
 	 */
@@ -83,7 +83,7 @@ public final class FragmentedInterval implements Serializable {
 
 	/**
 	 * Creates a new {@code FragmentedInterval}.
-	 * 
+	 *
 	 * @param intervals {@link FragmentedInterval FragmentedIntervals} which composes this
 	 *        {@code FragmentedInterval}.
 	 */
@@ -99,7 +99,7 @@ public final class FragmentedInterval implements Serializable {
 	/**
 	 * Indicates if this {@code FragmentedInterval} is contiguous, that is if it can be
 	 * represented by a single {@link Interval}.
-	 * 
+	 *
 	 * @return {@code true} if this {@code FragmentedInterval} is contiguous;<br>
 	 *         {@code false} otherwise.
 	 */
@@ -110,7 +110,7 @@ public final class FragmentedInterval implements Serializable {
 	/**
 	 * Indicates if this {@code FragmentedInterval} contains only the
 	 * <em>empty interval</em>.
-	 * 
+	 *
 	 * @return {@code true} if this {@code FragmentedInterval} contains only the
 	 *         <em>empty interval</em>;<br>
 	 *         {@code false} otherwise.
@@ -124,7 +124,7 @@ public final class FragmentedInterval implements Serializable {
 	 * <p>
 	 * The returned list is ordered in ascending order of intervals and is
 	 * <em>not modifiable</em>.
-	 * 
+	 *
 	 * @return the intervals composing this {@code FragmentedInterval}.
 	 */
 	public List<Interval> getIntervals() {
@@ -139,7 +139,7 @@ public final class FragmentedInterval implements Serializable {
 	 * Add the given {@link Interval interval} to this {@code FragmentedInterval}.<br>
 	 * If the given interval is a subset of this {@code FragmentedInterval}, nothing
 	 * happens.
-	 * 
+	 *
 	 * @param interval The interval to add.
 	 * @return {@code true} if the addition of the interval modifies this
 	 *         {@code FragmentedInterval};<br>
@@ -186,7 +186,7 @@ public final class FragmentedInterval implements Serializable {
 	 * Add the given {@code FragmentedInterval} to this one.<br>
 	 * If the given interval is a subset of this {@code FragmentedInterval}, nothing
 	 * happens.
-	 * 
+	 *
 	 * @param fragmentedInterval The interval to add.
 	 * @return {@code true} is the addition of the interval modifies this
 	 *         {@code FragmentedInterval};<br>
@@ -234,7 +234,7 @@ public final class FragmentedInterval implements Serializable {
 
 	/**
 	 * Indicates if the given point is contained in this {@code FragmentedInterval}.
-	 * 
+	 *
 	 * @param point The point for which to know if it is contained in this
 	 *        {@code FragmentedInterval}.
 	 * @return {@code true} if the given point is contained in this
@@ -251,7 +251,7 @@ public final class FragmentedInterval implements Serializable {
 	/**
 	 * Indicates if the given {@code Interval} is contained in this
 	 * {@code FragmentedInterval}.
-	 * 
+	 *
 	 * @param interval The {@link Interval}.
 	 * @return if the given {@code Interval} is contained in this
 	 *         {@code FragmentedInterval}.
@@ -266,7 +266,7 @@ public final class FragmentedInterval implements Serializable {
 	 * Indicates if the given {@code FragmentedInterval} is entirely contained in this
 	 * {@code FragmentedInterval}, that is if all the intervals int the given
 	 * {@code FragmentedInterval} are contained in this one.
-	 * 
+	 *
 	 * @param interval The {@code FragmentedInterval}.
 	 * @return if the given {@code FragmentedInterval} is entirely contained in this
 	 *         {@code FragmentedInterval}.
@@ -283,7 +283,7 @@ public final class FragmentedInterval implements Serializable {
 	/**
 	 * Create a new {@code FragmentedInterval} by excluding the given {@link Interval}
 	 * from this {@code FragmentedInterval}.
-	 * 
+	 *
 	 * @param interval The {@link Interval} to exclude.
 	 * @return the new {@code FragmentedInterval}.
 	 */
@@ -298,7 +298,7 @@ public final class FragmentedInterval implements Serializable {
 
 	/**
 	 * Excludes the given {@link Interval} from this {@code FragmentedInterval}.
-	 * 
+	 *
 	 * @param interval The {@link Interval} to exclude.
 	 */
 	void internalExclude(Interval interval) {
@@ -328,7 +328,7 @@ public final class FragmentedInterval implements Serializable {
 	/**
 	 * Create a new {@code FragmentedInterval} by excluding all the intervals of the given
 	 * {@code FragmentedInterval} from this {@code FragmentedInterval}.
-	 * 
+	 *
 	 * @param interval The {@code FragmentedInterval}.
 	 * @return the new {@code FragmentedInterval}.
 	 */
@@ -340,7 +340,7 @@ public final class FragmentedInterval implements Serializable {
 
 	/**
 	 * Excludes the given {@link FragmentedInterval} from this {@code FragmentedInterval}.
-	 * 
+	 *
 	 * @param interval The {@link FragmentedInterval} to exclude.
 	 */
 	void internalExclude(FragmentedInterval interval) {
@@ -353,7 +353,7 @@ public final class FragmentedInterval implements Serializable {
 
 	/**
 	 * Indicates if the given {@link Interval} intersects this {@code FragmentedInterval}.
-	 * 
+	 *
 	 * @param interval The {@link Interval}.
 	 * @return {@code true} if the given {@link Interval} intersects this
 	 *         {@code FragmentedInterval};<br>
@@ -371,7 +371,7 @@ public final class FragmentedInterval implements Serializable {
 	 * Indicates if the given {@code FragmentedInterval} intersects this
 	 * {@code FragmentedInterval}, that is if at least one of the intervals of the given
 	 * {@code FragmentedInterval} intersect this {@code FragmentedInterval}.
-	 * 
+	 *
 	 * @param interval The {@code FragmentedInterval}.
 	 * @return {@code true} if the given {@code FragmentedInterval} intersects this
 	 *         {@code FragmentedInterval};<br>
@@ -389,14 +389,49 @@ public final class FragmentedInterval implements Serializable {
 		return false;
 	}
 
-	// TODO intersection of interval
+	/**
+	 * Creates the {@code FragmentedInterval} corresponding to the intersection between this {@code FragmentedInterval}
+	 * and the specified {@link Interval}.
+	 *
+	 * @param interval The {@link Interval} to intersect with this one.
+	 * @return the {@code FragmentedInterval} corresponding to the intersection between this {@code FragmentedInterval}
+	 * and the specified {@link Interval}.
+	 */
 	public FragmentedInterval intersection(Interval interval) {
-		return new FragmentedInterval();
+		// XXX A better solution would be to find the intervals at the extremities
+		// of the given one
+		FragmentedInterval intersection = new FragmentedInterval();
+		if (!isEmpty() && !interval.isEmpty()) {
+			for (final IntervalMapKey key : intervals) {
+				if (interval.intersect(key.interval)) {
+					intersection.addInterval(interval.intersection(key.interval));
+				}
+			}
+		}
+		return intersection;
 	}
 
-	// TODO intersect of fragmented interval
+	/**
+	 * Creates the {@code FragmentedInterval} corresponding to the intersection of this {@code FragmentedInterval} and
+	 * the specified one.
+	 *
+	 * @param interval The {@code FragmentedInterval} to intersect with this one.
+	 * @return the {@code FragmentedInterval} corresponding to the intersection of this {@code FragmentedInterval} and
+	 * the specified one.
+	 */
 	public FragmentedInterval intersection(FragmentedInterval interval) {
-		return new FragmentedInterval();
+		// XXX algorithm too naive
+		FragmentedInterval intersection = new FragmentedInterval();
+		if (!isEmpty() && !interval.isEmpty()) {
+			for (final IntervalMapKey key : intervals) {
+				for (final IntervalMapKey other : interval.intervals) {
+					if (other.interval.intersect(key.interval)) {
+						intersection.addInterval(other.interval.intersection(key.interval));
+					}
+				}
+			}
+		}
+		return intersection;
 	}
 
 	// TODO union interval
@@ -413,7 +448,7 @@ public final class FragmentedInterval implements Serializable {
 	 * Create a new {@code FragmentedInterval} corresponding to the
 	 * <em>exclusive union</em> of the given {@link Interval} and this
 	 * {@code FragmentedInterval}.
-	 * 
+	 *
 	 * @param interval The {@link Interval} to make the exclusive union with.
 	 * @return the new {@code FragmentedInterval}.
 	 */
@@ -491,12 +526,11 @@ public final class FragmentedInterval implements Serializable {
 	static abstract class AIntervalMapKey<T extends AIntervalMapKey<?>> implements Comparable<T> {
 
 		private Class<T> type;
-		protected Interval interval;
+
+		Interval interval;
 
 		/**
 		 * Creates a new {@code IntervalMapKey}.
-		 * 
-		 * @param interval
 		 */
 		public AIntervalMapKey(Class<T> type, Interval interval) {
 			this.type = type;
@@ -530,8 +564,6 @@ public final class FragmentedInterval implements Serializable {
 
 		/**
 		 * Creates a new {@code IntervalMapKey}.
-		 * 
-		 * @param interval
 		 */
 		public IntervalMapKey(Interval interval) {
 			super(IntervalMapKey.class, interval);
@@ -562,8 +594,6 @@ public final class FragmentedInterval implements Serializable {
 
 		/**
 		 * Creates a new {@code IntervalMapKey}.
-		 * 
-		 * @param interval
 		 */
 		public TrailingIntervalMapKey(Interval interval) {
 			super(TrailingIntervalMapKey.class, interval);
