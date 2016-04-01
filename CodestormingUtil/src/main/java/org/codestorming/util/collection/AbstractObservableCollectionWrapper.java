@@ -23,6 +23,7 @@ import java.util.List;
  * Wrapper implementing {@link ObservableCollection} for collections.
  *
  * @author Thaedrik <thaedrik@codestorming.org>
+ * @since 1.2
  */
 public class AbstractObservableCollectionWrapper<E> extends AbstractObservableCollection<E>
 		implements ObservableCollection<E> {

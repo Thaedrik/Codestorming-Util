@@ -22,6 +22,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * Default implementation of an {@link ObservableValue}.
  *
  * @author Thaedrik <thaedrik@codestorming.org>
+ * @since 1.2
  */
 public class SimpleObservableValue<T> implements ObservableValue<T> {
 

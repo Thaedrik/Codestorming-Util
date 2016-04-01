@@ -32,6 +32,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * <em>Unlocking should happen in finally blocks to prevent deadlocks when an exception occurs.</em>
  *
  * @author Thaedrik <thaedrik@codestorming.org>
+ * @since 1.2
  */
 public abstract class AbstractObservableCollection<E> implements ObservableCollection<E> {
 

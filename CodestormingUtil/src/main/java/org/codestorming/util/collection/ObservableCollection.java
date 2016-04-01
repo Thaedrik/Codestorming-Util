@@ -18,6 +18,7 @@ import java.util.Collection;
  * on the collection.
  *
  * @author Thaedrik <thaedrik@codestorming.org>
+ * @since 1.2
  */
 public interface ObservableCollection<E> extends Collection<E> {
 

@@ -16,6 +16,7 @@ package org.codestorming.util.observable;
  * to the object changes.
  *
  * @author Thaedrik <thaedrik@codestorming.org>
+ * @since 1.2
  */
 public interface ObservableValue<T> {
 

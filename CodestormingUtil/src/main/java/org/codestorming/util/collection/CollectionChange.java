@@ -15,6 +15,7 @@ package org.codestorming.util.collection;
  * Describes a change that happend on an {@link ObservableCollection}.
  *
  * @author Thaedrik <thaedrik@codestorming.org>
+ * @since 1.2
  */
 public class CollectionChange<T> {
 

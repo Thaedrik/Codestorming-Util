@@ -17,5 +17,6 @@ import java.util.List;
  * {@link ObservableCollection} of type {@link List}.
  *
  * @author Thaedrik <thaedrik@codestorming.org>
+ * @since 1.2
  */
 public interface ObservableList<E> extends ObservableCollection<E>, List<E> {}

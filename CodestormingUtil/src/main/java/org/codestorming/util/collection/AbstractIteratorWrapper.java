@@ -17,6 +17,7 @@ import java.util.Iterator;
  * Implements {@link Iterator} methods that do not modify the collection state.
  *
  * @author Thaedrik <thaedrik@codestorming.org>
+ * @since 1.2
  */
 public abstract class AbstractIteratorWrapper<T> implements Iterator<T> {
 
