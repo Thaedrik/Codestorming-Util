@@ -18,7 +18,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Wrapper implementing {@link ObservableCollection} for collections.
@@ -39,7 +38,10 @@ public class AbstractObservableCollectionWrapper<E> extends AbstractObservableCo
 	}
 
 	public AbstractObservableCollectionWrapper(Collection<E> wrapped) {
-		this.wrapped = Objects.requireNonNull(wrapped);
+		if (wrapped == null) {
+			throw new NullPointerException("The wrapped collection cannot be null");
+		}// else
+		this.wrapped = wrapped;
 	}
 
 	@Override
