@@ -11,8 +11,6 @@
  */
 package org.codestorming.util.command;
 
-import java.util.concurrent.Callable;
-
 /**
  * Command for which a result can be retrieved after its execution.
  * 
@@ -36,7 +34,7 @@ public interface CommandWithResult<T> extends Runnable {
 	 * Define a callback that will be invoked when the command is done.
 	 * <p>
 	 * <em>Only one callback can be defined, this method is not complementary with
-	 * {@link #setCallback(Callable)}</em>.
+	 * {@link #setCallback(Callback)}</em>.
 	 * 
 	 * @param callback The callback to invoke at the end of the command.
 	 */
