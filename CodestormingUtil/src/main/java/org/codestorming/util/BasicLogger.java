@@ -19,7 +19,7 @@ import java.io.PrintStream;
  * Information and warning messages are written on the <em>standard output</em>. <br>
  * Error messages are written on the <em>standard error output</em>.
  * 
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  */
 public class BasicLogger implements Logger {
 

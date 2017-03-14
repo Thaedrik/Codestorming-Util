@@ -24,7 +24,7 @@ import java.util.ListIterator;
  * Utility class that operates on or returns collections from
  * {@code org.codestorming.util.collection} package.
  * 
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  * @see OrderedSet
  */
 public class Collections3 {

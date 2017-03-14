@@ -15,7 +15,7 @@ package org.codestorming.util.command;
  * Command for which a result can be retrieved after its execution.
  * 
  * @param <T> The type of the result.
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  */
 public interface CommandWithResult<T> extends Runnable {
 

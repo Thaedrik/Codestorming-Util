@@ -17,7 +17,7 @@ package org.codestorming.util;
  * Implementers are free to just display these messages in the standard output or to log
  * them in specified files or whatever fits their needs.
  * 
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  */
 public interface Logger {
 

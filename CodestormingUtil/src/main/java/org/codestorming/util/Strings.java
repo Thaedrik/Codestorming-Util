@@ -14,7 +14,7 @@ package org.codestorming.util;
 /**
  * Utility class for String operations.
  * 
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  */
 public class Strings {
 

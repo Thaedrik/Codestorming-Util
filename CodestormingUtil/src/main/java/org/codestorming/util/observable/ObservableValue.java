@@ -15,7 +15,7 @@ package org.codestorming.util.observable;
  * {@code ObservableValue} references an object and notifies the registered {@link ChangeListener}s when the reference
  * to the object changes.
  *
- * @author Thaedrik <thaedrik@codestorming.org>
+ * @author Thaedrik [thaedrik@codestorming.org]
  * @since 1.2
  */
 public interface ObservableValue<T> {

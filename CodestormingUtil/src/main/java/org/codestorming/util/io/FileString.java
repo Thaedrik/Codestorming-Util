@@ -23,7 +23,7 @@ import java.util.concurrent.FutureTask;
 /**
  * Represents a {@link CharSequence} of a text {@link File file}.
  * 
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  */
 public class FileString implements CharSequence {
 

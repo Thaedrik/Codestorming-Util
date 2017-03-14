@@ -14,7 +14,7 @@ package org.codestorming.util.misc;
 /**
  * Builder for creating {@link FragmentedInterval FragmentedIntervals}.
  * 
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  * @see FragmentedInterval
  */
 public class FragmentedIntervalBuilder {

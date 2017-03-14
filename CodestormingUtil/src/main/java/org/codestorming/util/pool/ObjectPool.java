@@ -24,7 +24,7 @@ import java.util.Set;
  * The pool returns pooled objects in priority, if no such object exists a new one is created with the specified {@link
  * org.codestorming.util.pool.ObjectPool.ObjectFactory}.
  *
- * @author Thaedrik <thaedrik@codestorming.org>
+ * @author Thaedrik [thaedrik@codestorming.org]
  * @since 1.3
  */
 public class ObjectPool<T> {

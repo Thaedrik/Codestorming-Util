@@ -22,7 +22,7 @@ import java.util.Set;
  * The addition of an object already present in the set does nothing, that is, the index
  * at which the object was first inserted does not change.
  * 
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  * @see Collections3
  */
 public interface OrderedSet<E> extends List<E>, Set<E> {

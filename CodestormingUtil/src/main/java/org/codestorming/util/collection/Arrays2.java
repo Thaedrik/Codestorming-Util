@@ -17,7 +17,7 @@ import java.util.Arrays;
 /**
  * Utility class for arrays.
  * 
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  * @see Arrays
  */
 public class Arrays2 {

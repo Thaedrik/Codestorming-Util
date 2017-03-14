@@ -23,7 +23,7 @@ import java.io.Serializable;
  * meaningless, when creating intervals through union or intersection, one should check if
  * the interval is empty.
  * 
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  * @see FragmentedInterval
  */
 public class Interval implements Serializable {

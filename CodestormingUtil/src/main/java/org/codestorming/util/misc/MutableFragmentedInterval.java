@@ -22,7 +22,7 @@ import org.codestorming.util.misc.FragmentedInterval.IntervalMapKey;
  * That is, all the methods for intersections, exclusions, unions, etc, affect directly
  * this {@code MutableFragmentedInterval}.
  * 
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  */
 public class MutableFragmentedInterval {
 

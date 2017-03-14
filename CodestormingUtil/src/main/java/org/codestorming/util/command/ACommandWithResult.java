@@ -15,7 +15,7 @@ package org.codestorming.util.command;
  * Abstract implementation of the {@link CommandWithResult} interface.
  * 
  * @param <T> The type of the result.
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  */
 public abstract class ACommandWithResult<T> implements CommandWithResult<T> {
 

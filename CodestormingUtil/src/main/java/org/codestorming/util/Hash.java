@@ -17,7 +17,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Utility class with hashing methods.
  * 
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  */
 public class Hash {
 

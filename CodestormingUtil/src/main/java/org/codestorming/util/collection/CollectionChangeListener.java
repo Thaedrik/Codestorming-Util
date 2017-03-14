@@ -14,7 +14,7 @@ package org.codestorming.util.collection;
 /**
  * Listener notified when the observed collection has changed.
  *
- * @author Thaedrik <thaedrik@codestorming.org>
+ * @author Thaedrik [thaedrik@codestorming.org]
  * @since 1.2
  */
 public interface CollectionChangeListener<T> {

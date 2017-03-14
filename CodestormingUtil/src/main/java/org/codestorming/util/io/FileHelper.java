@@ -19,7 +19,7 @@ import java.text.MessageFormat;
 /**
  * Helper providing convenient methods for dealing with {@link File files}.
  * 
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  */
 public class FileHelper {
 

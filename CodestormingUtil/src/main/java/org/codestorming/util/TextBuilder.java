@@ -16,7 +16,7 @@ import java.io.Serializable;
 /**
  * {@code TextBuilder} is a modifiable {@link CharSequence}.
  *
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  * @since 1.1
  */
 public class TextBuilder implements CharSequence, Serializable {

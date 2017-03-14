@@ -16,7 +16,7 @@ import java.util.ListIterator;
 /**
  * Implements {@link ListIterator} methods that do not modify the list state.
  *
- * @author Thaedrik <thaedrik@codestorming.org>
+ * @author Thaedrik [thaedrik@codestorming.org]
  * @since 1.2
  */
 public abstract class AbstractListIteratorWrapper<T> implements ListIterator<T> {

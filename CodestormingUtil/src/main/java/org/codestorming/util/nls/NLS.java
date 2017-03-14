@@ -49,7 +49,7 @@ import java.util.Locale;
  * <em><code>com.example.nls.i18n</code></em> if the properties files are in the package
  * {@code com.example.nls}).
  *
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  * @since 1.1
  */
 public abstract class NLS extends PropertiesLoader {

@@ -22,7 +22,7 @@ import java.util.ListIterator;
 /**
  * {@link ObservableList} implementation by wrapping an existing {@link List}.
  *
- * @author Thaedrik <thaedrik@codestorming.org>
+ * @author Thaedrik [thaedrik@codestorming.org]
  * @since 1.2
  */
 public class ObservableListWrapper<E> extends AbstractObservableCollectionWrapper<E> implements ObservableList<E> {

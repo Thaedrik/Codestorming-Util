@@ -19,7 +19,7 @@ import java.io.UnsupportedEncodingException;
 /**
  * Utility class with I/O methods.
  * 
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  */
 public class IOUtil {
 

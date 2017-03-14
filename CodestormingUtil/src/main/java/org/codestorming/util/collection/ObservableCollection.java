@@ -17,7 +17,7 @@ import java.util.Collection;
  * {@code ObservableCollection} is a {@link Collection} that notifies its referenced listeners of changes that happened
  * on the collection.
  *
- * @author Thaedrik <thaedrik@codestorming.org>
+ * @author Thaedrik [thaedrik@codestorming.org]
  * @since 1.2
  */
 public interface ObservableCollection<E> extends Collection<E> {

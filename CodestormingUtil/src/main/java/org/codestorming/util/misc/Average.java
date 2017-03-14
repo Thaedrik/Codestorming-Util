@@ -23,7 +23,7 @@ import java.io.Serializable;
  * <em>synchronized</em> so that the insertion order of the values is consistent with the
  * calls sequence from multiple threads.
  * 
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  */
 public class Average implements Serializable {
 

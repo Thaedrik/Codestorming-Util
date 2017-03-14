@@ -37,7 +37,7 @@ import java.util.Set;
  * <em>set</em> and <em>add</em> are <strong>not supported</strong> <TODO : implements
  * these methods>.
  * 
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  */
 public class OrderedHashSet<E> implements OrderedSet<E>, RandomAccess, Cloneable, Serializable {
 

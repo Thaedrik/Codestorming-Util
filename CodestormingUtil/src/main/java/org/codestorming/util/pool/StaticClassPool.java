@@ -21,7 +21,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * <p/>
  * The pooled objects must inherit from {@link TypedPoolObject}.
  *
- * @author Thaedrik <thaedrik@codestorming.org>
+ * @author Thaedrik [thaedrik@codestorming.org]
  * @see ObjectPool
  */
 public class StaticClassPool {

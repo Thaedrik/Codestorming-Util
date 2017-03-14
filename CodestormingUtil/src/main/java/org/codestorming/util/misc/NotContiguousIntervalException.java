@@ -17,7 +17,7 @@ package org.codestorming.util.misc;
  * e.g. The union between {@code [0, 1]} and {@code [3, 4]} will result in a not
  * contiguous interval ({@code 2} is missing).
  * 
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  */
 public class NotContiguousIntervalException extends RuntimeException {
 

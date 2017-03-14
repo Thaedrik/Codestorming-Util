@@ -14,7 +14,7 @@ package org.codestorming.util.observable;
 /**
  * Listener notified when the listened {@link ObservableValue} changes of value.
  *
- * @author Thaedrik <thaedrik@codestorming.org>
+ * @author Thaedrik [thaedrik@codestorming.org]
  * @since 1.2
  */
 public interface ChangeListener<T> {

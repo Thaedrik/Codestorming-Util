@@ -14,7 +14,7 @@ package org.codestorming.util.pool;
 /**
  * Objects inheriting from {@code TypedPoolObject} can be obtained and put back into the {@link StaticClassPool}.
  *
- * @author Thaedrik <thaedrik@codestorming.org>
+ * @author Thaedrik [thaedrik@codestorming.org]
  */
 public abstract class TypedPoolObject {
 

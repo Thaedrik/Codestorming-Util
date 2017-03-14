@@ -14,7 +14,7 @@ package org.codestorming.util.command;
 /**
  * Defines a callback with a parameter.
  *
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  * @param <T> The type of the parameter that will be passed to the call method.
  */
 public interface Callback<T> {

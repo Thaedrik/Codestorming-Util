@@ -27,7 +27,7 @@ import java.util.TreeSet;
  * {@link Interval intervals} to the constructor or by using the
  * {@link FragmentedIntervalBuilder}.
  *
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  * @see Interval
  * @see FragmentedIntervalBuilder
  */

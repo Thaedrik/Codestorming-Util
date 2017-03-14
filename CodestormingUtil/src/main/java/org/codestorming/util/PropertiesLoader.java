@@ -22,7 +22,7 @@ import java.util.Properties;
  * A {@code PropertiesLoader} will initialize its public non-final String fields from a
  * properties file.
  *
- * @author Thaedrik <thaedrik@gmail.com>
+ * @author Thaedrik [thaedrik@codestorming.org]
  * @since 1.1
  */
 public abstract class PropertiesLoader {
