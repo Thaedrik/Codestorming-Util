@@ -13,8 +13,6 @@ package org.codestorming.util;
 
 import java.io.PrintStream;
 
-import org.codestorming.util.Logger.Severity;
-
 /**
  * A basic {@link Logger} that writes on the standard print streams.
  * <p>
@@ -43,11 +41,15 @@ public class BasicLogger implements Logger {
 
 	@Override
 	public void log(Severity severity, CharSequence message) {
-		if ((severity.getCode() & filter) != 0) {
+		if (isLogable(severity)) {
 			PrintStream output;
-			String prefix = "";
+			String prefix;
 			if (severity == Severity.INFO) {
 				output = System.out;
+				prefix = "[INFO] ";
+			} else if (severity == Severity.DEBUG) {
+				output = System.out;
+				prefix = "[DEBUG] ";
 			} else if (severity == Severity.WARNING) {
 				output = System.out;
 				prefix = "[WARNING] ";
@@ -74,6 +76,17 @@ public class BasicLogger implements Logger {
 	@Override
 	public void log(Exception exception) {
 		log(Severity.ERROR, createExceptionMessage(exception));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @param severity The {@link Severity} to check.
+	 * @since 1.4
+	 */
+	@Override
+	public boolean isLogable(Severity severity) {
+		return (severity.getCode() & filter) != 0;
 	}
 
 	/**

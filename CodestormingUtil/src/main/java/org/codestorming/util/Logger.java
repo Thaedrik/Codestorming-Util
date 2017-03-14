@@ -24,10 +24,28 @@ public interface Logger {
 	/**
 	 * Severity level for {@code Logger}'s messages.
 	 */
-	public static enum Severity {
+	enum Severity {
+		/**
+		 * Information log level.
+		 */
 		INFO(1),
+
+		/**
+		 * Warning log level.
+		 */
 		WARNING(1 << 1),
-		ERROR(1 << 2);
+
+		/**
+		 * Error log level.
+		 */
+		ERROR(1 << 2),
+
+		/**
+		 * Debug log level.
+		 *
+		 * @since 1.4
+		 */
+		DEBUG(1 << 3);
 
 		private int code;
 
@@ -51,7 +69,7 @@ public interface Logger {
 	 * 
 	 * @param severities The {@link Severity severities} to allow.
 	 */
-	public void filter(Severity... severities);
+	void filter(Severity... severities);
 
 	/**
 	 * Logs the given {@code message} with the specified {@code severity}.
@@ -59,14 +77,14 @@ public interface Logger {
 	 * @param severity The {@link Severity} level.
 	 * @param message The message to log.
 	 */
-	public void log(Severity severity, CharSequence message);
+	void log(Severity severity, CharSequence message);
 
 	/**
 	 * Logs the given {@code message} with the {@link Severity#INFO} level.
 	 * 
 	 * @param message The message to log.
 	 */
-	public void log(CharSequence message);
+	void log(CharSequence message);
 
 	/**
 	 * Logs the given {@code exception}'s with the {@link Severity#ERROR} level.
@@ -75,5 +93,14 @@ public interface Logger {
 	 * 
 	 * @param exception The exception to log.
 	 */
-	public void log(Exception exception);
+	void log(Exception exception);
+
+	/**
+	 * Indicates if the specified {@link Severity} is currently logable.
+	 *
+	 * @param severity The {@link Severity} to check.
+	 * @return {@code true} if the specified {@link Severity} is currently logable;{@code false} otherwise.
+	 * @since 1.4
+	 */
+	boolean isLogable(Severity severity);
 }
