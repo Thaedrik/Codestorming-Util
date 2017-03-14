@@ -126,6 +126,23 @@ public class Bytes {
 		return hexString.toUpperCase();
 	}
 
+	/**
+	 * Returns the hexadecimal string corresponding to the given bytes array.
+	 * <p/>
+	 * The letters are upper case.
+	 *
+	 * @param bytes The byte array to convert to hexadecimal string.
+	 * @return the hexadecimal string corresponding to the given bytes array.
+	 * @since 1.4
+	 */
+	public static String bytesToHexString(byte[] bytes) {
+		StringBuilder str = new StringBuilder();
+		for (byte b : bytes) {
+			str.append(byteToString(b));
+		}
+		return str.toString();
+	}
+
 	// Suppressing default constructor, ensuring non-instantiability
 	private Bytes() {}
 
