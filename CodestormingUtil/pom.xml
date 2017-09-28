@@ -43,6 +43,13 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.5</version>
             </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12.4</version>
+                <configuration>
+                    <workingDirectory>${project.build.directory}/tests-wd</workingDirectory>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
